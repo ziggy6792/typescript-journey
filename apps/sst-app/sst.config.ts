@@ -2,11 +2,7 @@
 /* eslint-disable prettier/prettier */
 import { SSTConfig } from 'sst';
 import { commonConfig } from '@ts-journey/common';
-import { AuthStack } from './stacks/AuthStack';
 import { ApiStack } from './stacks/ApiStack';
-
-import { NextApp } from './stacks/NextApp';
-import { ViteApp } from './stacks/ViteApp';
 
 export default {
   config(_input) {
