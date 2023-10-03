@@ -1,6 +1,6 @@
 # Typescript Monorepo starter
 
-This is an official starter Turborepo.
+By Simon Verhoeven
 
 ## Getting started
 
