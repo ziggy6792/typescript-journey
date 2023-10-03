@@ -10,8 +10,6 @@ import { PROJECT_NAME } from './utils';
 
 const app = new cdk.App();
 
-console.log(path.join(require.resolve('@ts-journey/next-app'), '..'));
-
 const stack = new DeploymentStack(app, PROJECT_NAME, {
   env: {
     account: config.AWS_ACCOUNT_ID,
