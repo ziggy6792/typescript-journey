@@ -1,4 +1,4 @@
-import { commonConfig } from '@ts-monorepo/common';
+import { commonConfig } from '@ts-journey/common';
 import { z } from 'zod';
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc';

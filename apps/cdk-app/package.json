@@ -1,5 +1,5 @@
 {
-  "name": "@ts-monorepo/cdk-app",
+  "name": "@ts-journey/cdk-app",
   "version": "0.1.0",
   "license": "UNLICENSED",
   "private": true,
@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@aws-solutions-constructs/core": "^2.41.0",
-    "@ts-monorepo/api": "0.0.1",
-    "@ts-monorepo/next-app": "workspace:^",
+    "@ts-journey/api": "0.0.1",
+    "@ts-journey/next-app": "workspace:^",
     "@types/minimist": "^1",
     "@types/node": "20.4.8",
     "@types/node-abi": "^3",

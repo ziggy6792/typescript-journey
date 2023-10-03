@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { Injectable } from '@nestjs/common';
-import { commonConfig } from '@ts-monorepo/common';
+import { commonConfig } from '@ts-journey/common';
 
 @Injectable()
 export class AppService {

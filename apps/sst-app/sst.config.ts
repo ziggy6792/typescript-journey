@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
 import { SSTConfig } from 'sst';
-import { commonConfig } from '@ts-monorepo/common';
+import { commonConfig } from '@ts-journey/common';
 import { AuthStack } from './stacks/AuthStack';
 import { ApiStack } from './stacks/ApiStack';
 

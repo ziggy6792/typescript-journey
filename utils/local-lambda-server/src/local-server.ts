@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { getNestApp } from '@ts-monorepo/api';
+import { getNestApp } from '@ts-journey/api';
 
 const buildLocalServer = async () => {
   const app = await getNestApp();

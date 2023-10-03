@@ -15,7 +15,7 @@ export function ApiStack({ stack, app }: StackContext) {
     handler: 'apps/lambda-api/dist/index.handler',
     code: lambda.Code.fromDockerBuild(process.env.PROJECT_CWD!, {
       buildArgs: {
-        PACKAGE_NAME: '@ts-monorepo/api',
+        PACKAGE_NAME: '@ts-journey/api',
       },
     }),
   });

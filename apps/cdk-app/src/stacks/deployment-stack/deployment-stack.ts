@@ -18,7 +18,7 @@ class DeploymentStack extends cdk.Stack {
     super(scope, id, props);
 
     // const nextapp = new Nextjs(this, utils.getConstructId('next-app'), {
-    //   nextjsPath: path.join(require.resolve('@ts-monorepo/next-app'), '..'), // relative path to nextjs project root
+    //   nextjsPath: path.join(require.resolve('@ts-journey/next-app'), '..'), // relative path to nextjs project root
     //   buildCommand: 'yarn open:next:build',
     //   // ToDo : add cognito auth env
     // });
@@ -62,7 +62,7 @@ class DeploymentStack extends cdk.Stack {
     //   runtime: lambda.Runtime.FROM_IMAGE,
     //   handler: lambda.Handler.FROM_IMAGE,
     //   code: lambda.Code.fromDockerBuild(process.env.PROJECT_CWD),
-    //   // code: lambda.Code.fromDockerBuild(path.join(require.resolve('@ts-monorepo/api'), '../..'),),
+    //   // code: lambda.Code.fromDockerBuild(path.join(require.resolve('@ts-journey/api'), '../..'),),
     //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // });
   }

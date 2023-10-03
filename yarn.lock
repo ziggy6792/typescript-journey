@@ -4881,9 +4881,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-monorepo/api@0.0.1, @ts-monorepo/api@workspace:apps/lambda-api":
+"@ts-journey/api@0.0.1, @ts-journey/api@workspace:apps/lambda-api":
   version: 0.0.0-use.local
-  resolution: "@ts-monorepo/api@workspace:apps/lambda-api"
+  resolution: "@ts-journey/api@workspace:apps/lambda-api"
   dependencies:
     "@nestjs/cli": ^10.1.11
     "@nestjs/common": ^10.1.3
@@ -4891,7 +4891,7 @@ __metadata:
     "@nestjs/platform-express": ^10.1.3
     "@nestjs/schematics": ^10.0.1
     "@nestjs/testing": ^10.1.3
-    "@ts-monorepo/common": "workspace:^"
+    "@ts-journey/common": "workspace:^"
     "@types/express": ^4.17.17
     "@types/jest": 29.5.3
     "@types/node": 20.4.8
@@ -4915,13 +4915,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-monorepo/cdk-app@workspace:apps/cdk-app":
+"@ts-journey/cdk-app@workspace:apps/cdk-app":
   version: 0.0.0-use.local
-  resolution: "@ts-monorepo/cdk-app@workspace:apps/cdk-app"
+  resolution: "@ts-journey/cdk-app@workspace:apps/cdk-app"
   dependencies:
     "@aws-solutions-constructs/core": ^2.41.0
-    "@ts-monorepo/api": 0.0.1
-    "@ts-monorepo/next-app": "workspace:^"
+    "@ts-journey/api": 0.0.1
+    "@ts-journey/next-app": "workspace:^"
     "@types/minimist": ^1
     "@types/node": 20.4.8
     "@types/node-abi": ^3
@@ -4958,9 +4958,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-monorepo/common@workspace:^, @ts-monorepo/common@workspace:packages/common":
+"@ts-journey/common@workspace:^, @ts-journey/common@workspace:packages/common":
   version: 0.0.0-use.local
-  resolution: "@ts-monorepo/common@workspace:packages/common"
+  resolution: "@ts-journey/common@workspace:packages/common"
   dependencies:
     "@types/jest": ^27.0.3
     "@types/node": ^16.11.7
@@ -4979,11 +4979,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-monorepo/local-lambda-server@workspace:utils/local-lambda-server":
+"@ts-journey/local-lambda-server@workspace:utils/local-lambda-server":
   version: 0.0.0-use.local
-  resolution: "@ts-monorepo/local-lambda-server@workspace:utils/local-lambda-server"
+  resolution: "@ts-journey/local-lambda-server@workspace:utils/local-lambda-server"
   dependencies:
-    "@ts-monorepo/api": 0.0.1
+    "@ts-journey/api": 0.0.1
     "@types/express": ^4.17.17
     "@types/node": ^20.4.8
     axios: ^1.4.0
@@ -5004,9 +5004,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-monorepo/next-app@workspace:^, @ts-monorepo/next-app@workspace:apps/next-app":
+"@ts-journey/next-app@workspace:^, @ts-journey/next-app@workspace:apps/next-app":
   version: 0.0.0-use.local
-  resolution: "@ts-monorepo/next-app@workspace:apps/next-app"
+  resolution: "@ts-journey/next-app@workspace:apps/next-app"
   dependencies:
     "@t3-oss/env-nextjs": ^0.6.0
     "@tanstack/react-query": ^4.32.6
@@ -5014,7 +5014,7 @@ __metadata:
     "@trpc/next": ^10.37.1
     "@trpc/react-query": ^10.37.1
     "@trpc/server": ^10.37.1
-    "@ts-monorepo/common": "workspace:^"
+    "@ts-journey/common": "workspace:^"
     "@types/eslint": ^8.44.2
     "@types/minimist": ^1
     "@types/node": ^18.16.0
@@ -5050,12 +5050,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-monorepo/sst-app@workspace:apps/sst-app":
+"@ts-journey/sst-app@workspace:apps/sst-app":
   version: 0.0.0-use.local
-  resolution: "@ts-monorepo/sst-app@workspace:apps/sst-app"
+  resolution: "@ts-journey/sst-app@workspace:apps/sst-app"
   dependencies:
-    "@ts-monorepo/common": "workspace:^"
-    "@ts-monorepo/vite-app": "workspace:^"
+    "@ts-journey/common": "workspace:^"
+    "@ts-journey/vite-app": "workspace:^"
     aws-cdk-lib: 2.91.0
     constructs: 10.2.69
     eslint: ^8.46.0
@@ -5063,9 +5063,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-monorepo/vite-app@workspace:^, @ts-monorepo/vite-app@workspace:apps/vite-app":
+"@ts-journey/vite-app@workspace:^, @ts-journey/vite-app@workspace:apps/vite-app":
   version: 0.0.0-use.local
-  resolution: "@ts-monorepo/vite-app@workspace:apps/vite-app"
+  resolution: "@ts-journey/vite-app@workspace:apps/vite-app"
   dependencies:
     "@types/react": ^18.2.15
     "@types/react-dom": ^18.2.7
@@ -17459,9 +17459,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-monorepo@workspace:.":
+"ts-journey@workspace:.":
   version: 0.0.0-use.local
-  resolution: "ts-monorepo@workspace:."
+  resolution: "ts-journey@workspace:."
   dependencies:
     "@commitlint/cli": ^17.7.1
     "@commitlint/config-conventional": ^17.7.0

@@ -1,5 +1,5 @@
 {
-  "name": "@ts-monorepo/next-app",
+  "name": "@ts-journey/next-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
     "@trpc/next": "^10.37.1",
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
-    "@ts-monorepo/common": "workspace:^",
+    "@ts-journey/common": "workspace:^",
     "detect-libc": "^2.0.2",
     "expand-template": "^2.0.3",
     "github-from-package": "^0.0.0",

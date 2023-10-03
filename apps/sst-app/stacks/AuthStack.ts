@@ -1,4 +1,4 @@
-import { ssmParamUtils } from '@ts-monorepo/common';
+import { ssmParamUtils } from '@ts-journey/common';
 import { Cognito, StackContext } from 'sst/constructs';
 import { getConstructName } from '../utils/utility';
 

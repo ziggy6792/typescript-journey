@@ -13,7 +13,7 @@ export function NextApp({ stack }: StackContext) {
   const { userPoolClientId, userPoolClientSecret } = auth.cdk.userPoolClient;
 
   const site = new NextjsSite(stack, 'next-app', {
-    path: path.join(require.resolve('@ts-monorepo/next-app'), '..'),
+    path: path.join(require.resolve('@ts-journey/next-app'), '..'),
     buildCommand: 'yarn open:next:build',
     bind: [],
     environment: {

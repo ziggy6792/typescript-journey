@@ -1,10 +1,10 @@
 {
   "private": true,
-  "name": "ts-monorepo",
+  "name": "ts-journey",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "deploy": "turbo run deploy --filter @ts-monorepo/sst-app",
+    "deploy": "turbo run deploy --filter @ts-journey/sst-app",
     "build:deploy": "run-s build deploy",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
