@@ -1,6 +1,8 @@
 {
+  "extends": "tsconfig/base.json",
   "compilerOptions": {
     "module": "commonjs",
+    "composite": true,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -9,6 +11,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,

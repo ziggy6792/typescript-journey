@@ -5,7 +5,7 @@ By Simon Verhoeven
 ## Getting started
 
 - `yarn install`
-- `yarn start` run locally for development
+- `yarn dev` run locally for development
 - `yarn build` build packages
 - `yarn deploy` deploy with SST
 
@@ -26,13 +26,13 @@ This Turborepo includes the following packages/apps:
 - `lambda-api`: a [Nest.js](https://nestjs.com/) hello world app
 - `sst-app`: [sst](https://sst.dev/) Deployment code deploys stack to AWS
 - `cdk-app`: [cdk](https://github.com/aws/aws-cdk) Deployment code (alternative) deploys stack to AWS
-- `vite-app`: [Vite.js](https://vitejs.dev/guide/) Fronend App runs on `http://localhost:5173/`
-- `next-app`: [Next.js](https://nextjs.org/) Fronend App runs on `http://localhost:3000/`
+- `vite-app`: [Vite.js](https://vitejs.dev/guide/) Frontend App runs on `http://localhost:5173/`
+- `next-app`: [Next.js](https://nextjs.org/) Frontend App runs on `http://localhost:3000/`
 
 ### Packages
 
 - `common`: Common code shared between packages
-- `eslint-config-custom`: `eslint` conacfigurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
