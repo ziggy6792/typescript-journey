@@ -5,8 +5,8 @@ By Simon Verhoeven
 ## Getting started
 
 - `yarn install`
-- `yarn dev` run locally for development
 - `yarn build` build packages
+- `yarn dev` run locally for development
 - `yarn deploy` deploy with SST
 
 ## Using this example
@@ -41,7 +41,7 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 - `local-lambda-server` runs `lambda-api` app on localhost:4000
 
-###
+### Tools
 
 This Turborepo has some additional tools already setup for you:
 
