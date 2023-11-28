@@ -3,6 +3,7 @@
 import { SSTConfig } from 'sst';
 import { commonConfig } from '@ts-journey/common';
 import { ApiStack } from './stacks/ApiStack';
+import { ViteApp } from './stacks/ViteApp';
 
 export default {
   config(_input) {
@@ -13,8 +14,8 @@ export default {
     };
   },
   stacks(app) {
-    app.stack(ApiStack);
+    // app.stack(ApiStack);
     // app.stack(AuthStack).stack(NextApp);
-    // app.stack(ViteApp);
+    app.stack(ViteApp);
   },
 } satisfies SSTConfig;
