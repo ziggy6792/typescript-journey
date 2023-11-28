@@ -4935,6 +4935,7 @@ __metadata:
   resolution: "@ts-journey/sst-app@workspace:apps/sst-app"
   dependencies:
     "@ts-journey/common": "workspace:^"
+    "@ts-journey/vite-app": "workspace:^"
     aws-cdk-lib: 2.91.0
     constructs: 10.2.69
     eslint: ^8.46.0
@@ -4942,7 +4943,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-journey/vite-app@workspace:apps/vite-app":
+"@ts-journey/vite-app@workspace:^, @ts-journey/vite-app@workspace:apps/vite-app":
   version: 0.0.0-use.local
   resolution: "@ts-journey/vite-app@workspace:apps/vite-app"
   dependencies:
