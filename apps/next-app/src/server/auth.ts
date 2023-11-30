@@ -1,11 +1,7 @@
-import {
-  getServerSession,
-  type DefaultSession,
-  type NextAuthOptions,
-} from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
+import Cognito from 'next-auth/providers/cognito';
 
-import { env } from "~/env";
+import { env } from '~/env';
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -13,13 +9,13 @@ import { env } from "~/env";
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"];
+    } & DefaultSession['user'];
   }
 
   // interface User {
@@ -44,9 +40,10 @@ export const authOptions: NextAuthOptions = {
     }),
   },
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    Cognito({
+      clientId: env.COGNITO_CLIENT_ID!,
+      clientSecret: env.COGNITO_CLIENT_SECRET,
+      issuer: env.COGNITO_ISSUER,
     }),
     /**
      * ...add more providers here.
