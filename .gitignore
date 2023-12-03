@@ -141,7 +141,7 @@ dist
 .pnp.*
 .yarn/yarn.build.json
 
-*/*.env-local
+
 
 **/bundle.zip
 **/bundle
@@ -154,5 +154,5 @@ dist
 **/.DS_Store
 
 
-**/.env.local
+
 **/.env.production
