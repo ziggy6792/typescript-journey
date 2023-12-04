@@ -1,45 +1,38 @@
-import Nav from './components/Nav';
+import Link from 'next/link';
 
-export default function Home() {
+// import { getServerAuthSession } from '~/server/auth';
+import styles from './index.module.css';
+
+export default async function Home() {
+  // const session = await getServerAuthSession();
+
+  const session = { user: { email: '' } };
+
   return (
-    <>
-      <h1>Nextjs App Router</h1>
-
-      <main className='grid grid-cols-2 gap-4 p-10 [&>a]:border'>
-        <Nav href={'/albums'} title='Albums'>
-          Modal and interception of the greatest hits
-        </Nav>
-        <Nav href={'/rewrite'} title='Rewrite'>
-          Middleware Rewrite of a page. /rewrite should rewrite the contents of /rewrite-destination
-        </Nav>
-        <Nav href={'/redirect'} title='Redirect'>
-          Middleware Rewrite of a page. /redirect should redirect page to /redirect-destination
-        </Nav>
-        <Nav href={'/server-actions'} title='Server Actions'>
-          Client component imports a 'use server' server action and calls it directly without setting up any api endpoints
-        </Nav>
-        <Nav href={'/isr'} title='ISR'>
-          Incremental Static Regeneration revalidates every 10 seconds with a new timestamp
-        </Nav>
-        <Nav href={'/ssr'} title='SSR'>
-          Server Side Render should generate a new timestamp on each load. Streaming support for loading...
-        </Nav>
-        <Nav href={'/api'} title='API'>
-          Calls an API endpoint defined in app/api/hello/route and middleware
-        </Nav>
-        <Nav href={'/parallel'} title='Parallel'>
-          Parallel routing
-        </Nav>
-        <Nav href={'/headers'} title='Headers'>
-          Headers from middleware should be available via headers()
-        </Nav>
-        <Nav href={'/search-query'} title='Search Query'>
-          Search Query Params should be available in middleware
-        </Nav>
-        <Nav href={'/sse'} title='Server Sent Events'>
-          Server Sent Events via Streaming
-        </Nav>
-      </main>
-    </>
+    <main className={styles.main}>
+      <div className={styles.container}>
+        <h1 className={styles.title}>
+          Create <span className={styles.pinkSpan}>T3</span> App
+        </h1>
+        <div className={styles.cardRow}>
+          <Link className={styles.card} href='https://create.t3.gg/en/usage/first-steps' target='_blank'>
+            <h3 className={styles.cardTitle}>First Steps →</h3>
+            <div className={styles.cardText}>Just the basics - Everything you need to know to set up your database and authentication.</div>
+          </Link>
+          <Link className={styles.card} href='https://create.t3.gg/en/introduction' target='_blank'>
+            <h3 className={styles.cardTitle}>Documentation →</h3>
+            <div className={styles.cardText}>Learn more about Create T3 App, the libraries it uses, and how to deploy it.</div>
+          </Link>
+        </div>
+        <div className={styles.showcaseContainer}>
+          <div className={styles.authContainer}>
+            <p className={styles.showcaseText}>{session && <span>Logged in as {session.user?.email}</span>}</p>
+            <Link href={session ? '/api/auth/signout' : '/api/auth/signin'} className={styles.loginButton}>
+              {session ? 'Sign out' : 'Sign in'}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }

@@ -5280,16 +5280,31 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ts-journey/app-router@workspace:apps/app-router"
   dependencies:
-    "@types/node": 20.5.0
-    "@types/react": 18.2.20
-    "@types/react-dom": 18.2.7
+    "@next/eslint-plugin-next": ^14.0.3
+    "@t3-oss/env-nextjs": ^0.7.1
+    "@tanstack/react-query": ^4.36.1
+    "@trpc/client": ^10.43.6
+    "@trpc/next": ^10.43.6
+    "@trpc/react-query": ^10.43.6
+    "@trpc/server": ^10.43.6
+    "@types/eslint": ^8.44.7
+    "@types/node": ^18.17.0
+    "@types/react": ^18.2.37
+    "@types/react-dom": ^18.2.15
+    "@typescript-eslint/eslint-plugin": ^6.11.0
+    "@typescript-eslint/parser": ^6.11.0
     autoprefixer: 10.4.15
+    eslint: ^8.54.0
     next: ^14.0.3
+    next-auth: ^4.24.5
     postcss: 8.4.27
-    react: latest
-    react-dom: latest
+    react: 18.2.0
+    react-dom: 18.2.0
+    server-only: ^0.0.1
+    superjson: ^2.2.1
     tailwindcss: 3.3.3
     typescript: ^4.9.3
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5717,13 +5732,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.5.0":
-  version: 20.5.0
-  resolution: "@types/node@npm:20.5.0"
-  checksum: 659bc5fc93b5c02bd88ca4bfae4f6b9dc307d45884d1dd9d69df85819a9943cdc00cd3c87eec3048866df6a67f52297f74d170e47a44f61edb3e8f770d94e85e
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:20.5.1":
   version: 20.5.1
   resolution: "@types/node@npm:20.5.1"
@@ -5798,15 +5806,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.2.7":
-  version: 18.2.7
-  resolution: "@types/react-dom@npm:18.2.7"
-  dependencies:
-    "@types/react": "*"
-  checksum: e02ea908289a7ad26053308248d2b87f6aeafd73d0e2de2a3d435947bcea0422599016ffd1c3e38ff36c42f5e1c87c7417f05b0a157e48649e4a02f21727d54f
-  languageName: node
-  linkType: hard
-
 "@types/react-dom@npm:^18.2.15":
   version: 18.2.17
   resolution: "@types/react-dom@npm:18.2.17"
@@ -5824,17 +5823,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 9bcb1f1f060f1bf8f4730fb1c7772d0323a6e707f274efee3b976c40d92af4677df4d88e9135faaacf34e13e02f92ef24eb7d0cbcf7fb75c1883f5623ccb19f4
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:18.2.20":
-  version: 18.2.20
-  resolution: "@types/react@npm:18.2.20"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 30f699c60e5e4bfef273ce64d320651cdd60f5c6a08361c6c7eca8cebcccda1ac953d2ee57c9f321b5ae87f8a62c72b6d35ca42df0e261d337849952daab2141
   languageName: node
   linkType: hard
 
@@ -16336,7 +16324,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:18.2.0, react-dom@npm:^18.2.0, react-dom@npm:latest":
+"react-dom@npm:18.2.0, react-dom@npm:^18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
   dependencies:
@@ -16390,7 +16378,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.2.0, react@npm:^18.0.0, react@npm:^18.2.0, react@npm:latest":
+"react@npm:18.2.0, react@npm:^18.0.0, react@npm:^18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
