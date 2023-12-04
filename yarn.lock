@@ -5276,7 +5276,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-journey/app-router@workspace:apps/app-router":
+"@ts-journey/app-router@workspace:^, @ts-journey/app-router@workspace:apps/app-router":
   version: 0.0.0-use.local
   resolution: "@ts-journey/app-router@workspace:apps/app-router"
   dependencies:
@@ -5414,6 +5414,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ts-journey/sst-app@workspace:apps/sst-app"
   dependencies:
+    "@ts-journey/app-router": "workspace:^"
     "@ts-journey/common": "workspace:^"
     "@ts-journey/next-app": "workspace:^"
     "@ts-journey/vite-app": "workspace:^"

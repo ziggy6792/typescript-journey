@@ -12,7 +12,7 @@ export default {
     return {
       name: commonConfig.PROJECT_NAME,
       region: 'ap-southeast-1',
-      stage: 'foobar',
+      stage: 'example',
     };
   },
   stacks(app) {
