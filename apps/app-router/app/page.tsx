@@ -1,10 +1,14 @@
 import Link from 'next/link';
 
-// import { getServerAuthSession } from '~/server/auth';
+import { getServerAuthSession } from './server/auth';
 import styles from './index.module.css';
 
 export default async function Home() {
-  // const session = await getServerAuthSession();
+  try {
+    const session = await getServerAuthSession();
+  } catch (error) {
+    console.log(error);
+  }
 
   const session = { user: { email: '' } };
 
