@@ -12,13 +12,14 @@ export default {
     return {
       name: commonConfig.PROJECT_NAME,
       region: 'ap-southeast-1',
-      stage: 'dev',
+      stage: 'foobar',
     };
   },
   stacks(app) {
     // app.stack(ApiStack);
     // app.stack(AuthStack);
-    app.stack(AuthStack).stack(NextApp);
+    app.stack(NextApp);
+    // app.stack(AuthStack).stack(NextApp);
     // app.stack(ViteApp);
   },
 } satisfies SSTConfig;
