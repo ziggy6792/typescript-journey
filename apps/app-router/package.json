@@ -1,0 +1,27 @@
+{
+  "name": "@ts-journey/app-router",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "open:next:build": "npx --yes open-next@2 build",
+    "dev": "next dev --port 3001",
+    "start": "next start --port 3001",
+    "lint": "next lint",
+    "clean": "rm -rf .turbo node_modules .next .open-next"
+  },
+  "dependencies": {
+    "next": "^14.0.3",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "20.5.0",
+    "@types/react": "18.2.20",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.15",
+    "postcss": "8.4.27",
+    "tailwindcss": "3.3.3",
+    "typescript": "^4.9.3"
+  }
+}
