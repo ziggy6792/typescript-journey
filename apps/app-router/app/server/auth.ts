@@ -1,7 +1,9 @@
-import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
-import Cognito from 'next-auth/providers/cognito';
-
-import { env } from '../env';
+import {
+  type DefaultSession,
+  getServerSession,
+  type NextAuthOptions,
+} from "next-auth";
+import Cognito from "next-auth/providers/cognito";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -9,13 +11,13 @@ import { env } from '../env';
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession['user'];
+    } & DefaultSession["user"];
   }
 
   // interface User {
@@ -40,6 +42,12 @@ export const authOptions: NextAuthOptions = {
     }),
   },
   providers: [
+    Cognito({
+      clientId: "pr4ioln8gee6upgfltsq00rie",
+      clientSecret: "njjhposu88stcoigf6sj651tuijls8dg1ltfe46b0rp940qh46r",
+      issuer:
+        "https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_dtYlWTzSe",
+    }),
     /**
      * ...add more providers here.
      *

@@ -12,14 +12,13 @@ export function NextApp({ stack }: StackContext) {
     buildCommand: 'yarn open:next:build',
     bind: [],
     environment: {
-      COGNITO_CLIENT_ID: 'XXXXXXXXXXXXXXXXXXXXXXXXX',
-      COGNITO_CLIENT_SECRET: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-      COGNITO_ISSUER: `https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_XXXXXXXXX`,
+      COGNITO_CLIENT_ID: 'pr4ioln8gee6upgfltsq00rie',
+      COGNITO_CLIENT_SECRET: 'njjhposu88stcoigf6sj651tuijls8dg1ltfe46b0rp940qh46r',
+      COGNITO_ISSUER: `https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_dtYlWTzSe`,
     },
-    // experimental: {
-    //   streaming: true,
-    // },
-    logging: 'combined',
+    experimental: {
+      streaming: true,
+    },
   });
 
   stack.addOutputs({

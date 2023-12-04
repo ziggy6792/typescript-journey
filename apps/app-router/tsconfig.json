@@ -8,14 +8,12 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-
     "plugins": [
       {
         "name": "next"
