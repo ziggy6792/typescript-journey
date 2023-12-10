@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "open:next:build": "open-next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
@@ -33,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "eslint": "^8.54.0",
+    "open-next": "^2.3.3",
     "typescript": "^5.1.6"
   },
   "ct3aMetadata": {
