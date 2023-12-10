@@ -12,9 +12,9 @@
     "@ts-journey/common": "workspace:^",
     "@ts-journey/next-app": "workspace:^",
     "@ts-journey/vite-app": "workspace:^",
-    "aws-cdk-lib": "2.91.0",
+    "aws-cdk-lib": "2.113.0",
     "constructs": "10.2.69",
-    "sst": "2.24.20"
+    "sst": "2.36.8"
   },
   "devDependencies": {
     "eslint": "^8.46.0"

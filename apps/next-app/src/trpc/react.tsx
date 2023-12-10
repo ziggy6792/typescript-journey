@@ -1,19 +1,17 @@
-"use client";
+'use client';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
-import { createTRPCReact } from "@trpc/react-query";
-import { useState } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { httpLink, loggerLink, unstable_httpBatchStreamLink } from '@trpc/client';
+import { createTRPCReact } from '@trpc/react-query';
+import { useState } from 'react';
 
-import { type AppRouter } from "~/server/api/root";
-import { getUrl, transformer } from "./shared";
+import { type AppRouter } from '~/server/api/root';
+import { getUrl, transformer } from './shared';
 
 export const api = createTRPCReact<AppRouter>();
 
-export function TRPCReactProvider(props: {
-  children: React.ReactNode;
-  cookies: string;
-}) {
+// eslint-disable-next-line react/no-unused-prop-types
+export function TRPCReactProvider(props: { children: React.ReactNode; cookies: string }) {
   const [queryClient] = useState(() => new QueryClient());
 
   const [trpcClient] = useState(() =>
@@ -21,16 +19,15 @@ export function TRPCReactProvider(props: {
       transformer,
       links: [
         loggerLink({
-          enabled: (op) =>
-            process.env.NODE_ENV === "development" ||
-            (op.direction === "down" && op.result instanceof Error),
+          enabled: (op) => process.env.NODE_ENV === 'development' || (op.direction === 'down' && op.result instanceof Error),
         }),
+        // httpLink({ url: getUrl() }),
         unstable_httpBatchStreamLink({
           url: getUrl(),
           headers() {
             return {
               cookie: props.cookies,
-              "x-trpc-source": "react",
+              'x-trpc-source': 'react',
             };
           },
         }),

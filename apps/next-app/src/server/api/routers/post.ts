@@ -28,7 +28,6 @@ export const postRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => 'you can now see this secret message!'),
 
   getUploadUrl: protectedProcedure.mutation(async () => {
-    console.log('process.env.SST_STAGE', process.env.SST_STAGE);
     const command = new PutObjectCommand({
       ACL: 'public-read',
       Key: crypto.randomUUID(),
