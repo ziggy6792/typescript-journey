@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
-import DiscordProvider from 'next-auth/providers/discord';
 import Cognito from 'next-auth/providers/cognito';
 
-import { env } from '~/env.mjs';
+import { env } from '~/env';
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -14,11 +11,11 @@ import { env } from '~/env.mjs';
  */
 declare module 'next-auth' {
   interface Session extends DefaultSession {
-    user: DefaultSession['user'] & {
+    user: {
       id: string;
       // ...other properties
       // role: UserRole;
-    };
+    } & DefaultSession['user'];
   }
 
   // interface User {
@@ -48,6 +45,15 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.COGNITO_CLIENT_SECRET,
       issuer: env.COGNITO_ISSUER,
     }),
+    /**
+     * ...add more providers here.
+     *
+     * Most other providers require a bit more work than the Discord provider. For example, the
+     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
+     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
+     *
+     * @see https://next-auth.js.org/providers/github
+     */
   ],
 };
 
@@ -56,6 +62,4 @@ export const authOptions: NextAuthOptions = {
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
-export const getServerAuthSession = (ctx: { req: GetServerSidePropsContext['req']; res: GetServerSidePropsContext['res'] }) => {
-  return getServerSession(ctx.req, ctx.res, authOptions);
-};
+export const getServerAuthSession = () => getServerSession(authOptions);

@@ -1,5 +1,5 @@
 {
-  "name": "@ts-monorepo/sst-app",
+  "name": "@ts-journey/sst-app",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -9,10 +9,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ts-monorepo/common": "workspace:^",
-    "aws-cdk-lib": "2.91.0",
-    "constructs": "10.2.69",
-    "sst": "2.24.20"
+    "@ts-journey/common": "workspace:^",
+    "@ts-journey/next-app": "workspace:^",
+    "@ts-journey/vite-app": "workspace:^",
+    "aws-cdk-lib": "2.113.0",
+    "constructs": "10.3.0",
+    "sst": "2.36.8"
   },
   "devDependencies": {
     "eslint": "^8.46.0"

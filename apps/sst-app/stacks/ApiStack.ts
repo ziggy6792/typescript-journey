@@ -1,27 +1,28 @@
-import { StackContext, Function, Api, ApiGatewayV1Api } from 'sst/constructs';
+import { StackContext } from 'sst/constructs';
 import { aws_lambda as lambda, aws_apigateway as apiGateway } from 'aws-cdk-lib';
+import * as cdk from 'aws-cdk-lib';
+import { getConstructName } from '../utils/utility';
 
-export function ApiStak({ stack }: StackContext) {
-  // Create auth provider
-  const myFunction = new Function(stack, 'MyFunction', {
-    runtime: 'container',
-    handler: process.env.PROJECT_CWD,
+export function ApiStack({ stack, app }: StackContext) {
+  const functionName = 'lambda-api';
+
+  const apiLambda = new lambda.Function(stack, functionName, {
+    functionName: getConstructName(functionName, app),
+    description: getConstructName(functionName, app),
+    memorySize: 256,
+    timeout: cdk.Duration.seconds(30),
+    runtime: lambda.Runtime.NODEJS_18_X,
+    handler: 'apps/lambda-api/dist/index.handler',
+    code: lambda.Code.fromDockerBuild(process.env.PROJECT_CWD!, {
+      buildArgs: {
+        PACKAGE_NAME: '@ts-journey/api',
+      },
+    }),
   });
 
-  //  const bla = new ApiGatewayV1Api(stack, 'Api', {
-
-  //  })
-
-  const api = new Api(stack, 'Api', {
-    routes: {
-      // 'GET /{proxy+}': myFunction,
-      $default: myFunction,
-    },
+  const api = new apiGateway.LambdaRestApi(stack, 'api', {
+    handler: apiLambda,
   });
-
-  // const api = new apiGateway.LambdaRestApi(this, utils.getConstructName('endpoint'), {
-  //   handler: myFunction.cd,
-  // });
 
   stack.addOutputs({
     url: api.url,

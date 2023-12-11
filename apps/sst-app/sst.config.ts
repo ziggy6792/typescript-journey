@@ -1,11 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable prettier/prettier */
 import { SSTConfig } from 'sst';
-import { commonConfig } from '@ts-monorepo/common';
-import { ApiStak } from './stacks/ApiStack';
+import { commonConfig } from '@ts-journey/common';
+import { ApiStack } from './stacks/ApiStack';
+import { ViteApp } from './stacks/ViteApp';
 import { AuthStack } from './stacks/AuthStack';
-import { CdkApiStack } from './stacks/CdkApiStack';
-
 import { NextApp } from './stacks/NextApp';
 
 export default {
@@ -17,7 +16,9 @@ export default {
     };
   },
   stacks(app) {
+    // app.stack(ApiStack);
+    // app.stack(AuthStack);
     app.stack(AuthStack).stack(NextApp);
-    // app.stack(CdkApiStack);
+    // app.stack(ViteApp);
   },
 } satisfies SSTConfig;
