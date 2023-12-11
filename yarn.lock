@@ -822,7 +822,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/client-s3@npm:^3.398.0, @aws-sdk/client-s3@npm:^3.454.0":
+"@aws-sdk/client-s3@npm:^3.398.0, @aws-sdk/client-s3@npm:^3.454.0, @aws-sdk/client-s3@npm:^3.470.0":
   version: 3.470.0
   resolution: "@aws-sdk/client-s3@npm:3.470.0"
   dependencies:
@@ -1458,6 +1458,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/s3-request-presigner@npm:^3.470.0":
+  version: 3.470.0
+  resolution: "@aws-sdk/s3-request-presigner@npm:3.470.0"
+  dependencies:
+    "@aws-sdk/signature-v4-multi-region": 3.470.0
+    "@aws-sdk/types": 3.468.0
+    "@aws-sdk/util-format-url": 3.468.0
+    "@smithy/middleware-endpoint": ^2.2.3
+    "@smithy/protocol-http": ^3.0.11
+    "@smithy/smithy-client": ^2.1.18
+    "@smithy/types": ^2.7.0
+    tslib: ^2.5.0
+  checksum: 1a3b03199592fe8852c7685a23f50f83e9b686e4ece6689fdc29ec6adc83f86738695a6f3359dfe77413f813b09fa2219d85bc457bd09613f225064ff642a8e7
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/signature-v4-crt@npm:^3.451.0":
   version: 3.470.0
   resolution: "@aws-sdk/signature-v4-crt@npm:3.470.0"
@@ -1581,6 +1597,18 @@ __metadata:
     "@smithy/util-endpoints": ^1.0.7
     tslib: ^2.5.0
   checksum: 3c1fb01db4d2ddd3429e50b9660f3f3729f5a73404f86642aa07f44fb84c253311a32eca74a2ec7e1940d7b4d63decf7e330497187813980af841645c71f88c3
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/util-format-url@npm:3.468.0":
+  version: 3.468.0
+  resolution: "@aws-sdk/util-format-url@npm:3.468.0"
+  dependencies:
+    "@aws-sdk/types": 3.468.0
+    "@smithy/querystring-builder": ^2.0.15
+    "@smithy/types": ^2.7.0
+    tslib: ^2.5.0
+  checksum: b8b469eaa32c0d680de067690363a982d37968a6e547a6201439e53165af2972a891ab2aff336de360ab6ced8c2b4204c40116e5893370b84c2e8c929295bb66
   languageName: node
   linkType: hard
 
@@ -5696,6 +5724,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ts-journey/next-app@workspace:apps/next-app"
   dependencies:
+    "@aws-sdk/client-s3": ^3.470.0
+    "@aws-sdk/s3-request-presigner": ^3.470.0
     "@next/eslint-plugin-next": ^14.0.3
     "@t3-oss/env-nextjs": ^0.7.1
     "@tanstack/react-query": ^4.36.1
@@ -5703,6 +5733,7 @@ __metadata:
     "@trpc/next": ^10.43.6
     "@trpc/react-query": ^10.43.6
     "@trpc/server": ^10.43.6
+    "@ts-journey/common": "workspace:^"
     "@types/eslint": ^8.44.7
     "@types/node": ^18.17.0
     "@types/react": ^18.2.37
@@ -5716,6 +5747,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     server-only: ^0.0.1
+    sst: 2.36.8
     superjson: ^2.2.1
     typescript: ^5.1.6
     zod: ^3.22.4
