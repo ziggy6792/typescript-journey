@@ -13,7 +13,7 @@
     "@ts-journey/next-app": "workspace:^",
     "@ts-journey/vite-app": "workspace:^",
     "aws-cdk-lib": "2.113.0",
-    "constructs": "10.2.69",
+    "constructs": "10.3.0",
     "sst": "2.36.8"
   },
   "devDependencies": {
