@@ -16,6 +16,9 @@ export function NextApp({ stack }: StackContext) {
       COGNITO_CLIENT_SECRET: userPoolClientSecret.toString(),
       COGNITO_ISSUER: `https://cognito-idp.ap-southeast-1.amazonaws.com/${auth.userPoolId}`,
     },
+    experimental: {
+      streaming: true,
+    },
   });
 
   stack.addOutputs({
