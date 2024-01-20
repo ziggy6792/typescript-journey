@@ -4,6 +4,7 @@ import { commonConfig } from 'src';
 
 export enum BucketName {
   'FILE_UPLOADS' = 'file-uploads',
+  'IMAGES' = 'images',
 }
 
 const getConstructName = (constuctName: string, stage: string): string => {

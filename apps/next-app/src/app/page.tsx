@@ -4,6 +4,7 @@ import { CreatePost } from '~/app/_components/create-post';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/trpc/server';
 import styles from './index.module.css';
+import { FileUpload } from './_components/file-upload';
 
 export default async function Home() {
   const hello = await api.post.hello.query({ text: 'from tRPC' });
@@ -35,10 +36,21 @@ export default async function Home() {
             </Link>
           </div>
         </div>
-
+        <UploadDemo />
         <CrudShowcase />
       </div>
     </main>
+  );
+}
+
+async function UploadDemo() {
+  const session = await getServerAuthSession();
+  if (!session?.user) return null;
+
+  return (
+    <div style={{ backgroundColor: 'gray', padding: '100px' }}>
+      <FileUpload />
+    </div>
   );
 }
 
