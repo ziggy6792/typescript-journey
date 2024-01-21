@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { commonUtils } from '@ts-journey/common';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { Bucket } from 'sst/node/bucket';
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc';
-import { env } from '~/env';
 
 let post = {
   id: 1,
@@ -32,7 +31,7 @@ export const postRouter = createTRPCRouter({
     const command = new PutObjectCommand({
       ACL: 'public-read',
       Key: crypto.randomUUID(),
-      Bucket: commonUtils.getS3BucketName(commonUtils.BucketName.FILE_UPLOADS, env.SST_STAGE),
+      Bucket: Bucket['file-uploads'].bucketName,
     });
     const url = (await getSignedUrl(new S3Client({}), command)) as string;
     return url;

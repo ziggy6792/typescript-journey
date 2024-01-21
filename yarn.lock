@@ -7708,6 +7708,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     server-only: ^0.0.1
+    sst: 2.24.20
     superjson: ^2.2.1
     typescript: ^5.1.6
     zod: ^3.22.4
