@@ -1,27 +1,22 @@
 {
+  "extends": "tsconfig/base.json",
   "compilerOptions": {
-    "composite": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "target": "es2017",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "importHelpers": false,
-    "declaration": true,
-    "skipLibCheck": true,
-    "module": "commonjs",
-    "allowSyntheticDefaultImports": true,
-    "plugins": [
-      {
-        "transform": "typescript-transform-paths"
-      }
-    ],
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo",
     "baseUrl": "./",
-    "paths": {}
+    "rootDir": "src",
+    "outDir": "dist",
+    "incremental": true,
+    "strict": false,
+    "declarationMap": true,
+    "paths": {
+      "src/*": ["src/*"],
+      "src": ["src"]
+    }
+  },
+  "tsc-alias": {
+    "verbose": true,
+    "resolveFullPaths": true,
+    "debug": true
   },
   "include": ["src/**/*"]
 }

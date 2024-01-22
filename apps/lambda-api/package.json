@@ -9,7 +9,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "pre:deploy": "yarn bundle --ignore-file ../../.bundleignore",
+    "pre:deploy": "rm -rf ./out && docker build ../../ --build-arg TARGET_APP=apps/lambda-api --output out",
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",

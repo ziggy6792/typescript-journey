@@ -150,6 +150,7 @@ dist
 **/.open-next
 
 **/.sst
+**/out
 
 **/.DS_Store
 

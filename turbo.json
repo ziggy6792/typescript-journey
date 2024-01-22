@@ -7,16 +7,22 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "pre:deploy": {
+      "dependsOn": ["build"],
+      "inputs": ["dist/**"],
+      "outputs": ["out/**"]
+    },
+    "deploy": {
+      "dependsOn": ["^pre:deploy"],
+      "cache": false,
+      "persistent": true
+    },
     "lint": {},
     "validate": {},
     "typecheck": {},
     "validate:check": {},
     "test": {},
     "test:coverage": {},
-    "deploy": {
-      "cache": false,
-      "persistent": true
-    },
     "dev": {
       "cache": false,
       "persistent": true

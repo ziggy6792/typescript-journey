@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ts-journey/api": "workspace:^",
     "@ts-journey/common": "workspace:^",
     "@ts-journey/next-app": "workspace:^",
     "@ts-journey/vite-app": "workspace:^",

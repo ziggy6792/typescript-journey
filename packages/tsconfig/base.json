@@ -10,7 +10,7 @@
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
     "strict": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "composite": true,
     "declarationMap": true,
     "sourceMap": true,
