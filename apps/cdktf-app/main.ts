@@ -1,18 +1,19 @@
 import { Construct } from 'constructs';
 import { App, AssetType, S3Backend, TerraformAsset, TerraformOutput, TerraformStack } from 'cdktf';
-import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3Object, s3BucketPublicAccessBlock } from '@cdktf/provider-aws';
+import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3Object, s3BucketPublicAccessBlock, cloudfrontDistribution } from '@cdktf/provider-aws';
 
 import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
 import { S3BucketPolicy } from '@cdktf/provider-aws/lib/s3-bucket-policy';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as mime from 'mime-types';
+import { AcmCertificate } from '@cdktf/provider-aws/lib/acm-certificate';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    new provider.AwsProvider(this, 'AWS', {
+    const useProvider = new provider.AwsProvider(this, 'AWS', {
       region: 'ap-southeast-1',
     });
 
@@ -89,9 +90,92 @@ class MyStack extends TerraformStack {
       },
     });
 
+    // CloudFront Distribution
+    // const myCloudfrontDistribution = new cloudfrontDistribution.CloudfrontDistribution(this, 'my-cloudfront-distribution', {
+    //   origin: [
+    //     {
+    //       domainName: myBucket.bucketRegionalDomainName,
+    //       originId: 's3-my-bucket',
+    //       s3OriginConfig: {
+    //         originAccessIdentity: '',
+    //       },
+    //     },
+    //   ],
+    //   enabled: true,
+    //   isIpv6Enabled: true,
+    //   defaultRootObject: 'index.html',
+    //   defaultCacheBehavior: {
+    //     allowedMethods: ['GET', 'HEAD'],
+    //     cachedMethods: ['GET', 'HEAD'],
+    //     targetOriginId: 's3-my-bucket',
+    //     viewerProtocolPolicy: 'redirect-to-https',
+    //     forwardedValues: {
+    //       queryString: false,
+    //       cookies: {
+    //         forward: 'none',
+    //       },
+    //     },
+    //   },
+    //   restrictions: {
+    //     geoRestriction: {
+    //       restrictionType: 'none',
+    //     },
+    //   },
+    //   viewerCertificate: {
+    //     cloudfrontDefaultCertificate: true,
+    //   },
+    // });
+
+    const myCloudfrontDistribution = new cloudfrontDistribution.CloudfrontDistribution(this, 'distribution', {
+      customErrorResponse: [
+        {
+          errorCode: 403,
+          responseCode: 200,
+          responsePagePath: '/',
+        },
+      ],
+      enabled: true,
+      defaultRootObject: 'index.html',
+      defaultCacheBehavior: {
+        allowedMethods: ['GET', 'HEAD'],
+        cachedMethods: ['GET', 'HEAD'],
+        targetOriginId: myBucket.id,
+        forwardedValues: {
+          queryString: true,
+          cookies: {
+            forward: 'all',
+          },
+          headers: ['Host', 'Accept-Datetime', 'Accept-Encoding', 'Accept-Language', 'User-Agent', 'Referer', 'Origin', 'X-Forwarded-Host'],
+        },
+        viewerProtocolPolicy: 'redirect-to-https',
+        minTtl: 0,
+        defaultTtl: 0,
+        maxTtl: 0,
+      },
+      origin: [
+        {
+          originId: myBucket.id,
+          domainName: myBucket.bucketRegionalDomainName,
+        },
+      ],
+      restrictions: {
+        geoRestriction: {
+          restrictionType: 'none',
+        },
+      },
+      viewerCertificate: {
+        cloudfrontDefaultCertificate: true,
+      },
+    });
+
     // Output the website URL
     new TerraformOutput(this, 'websiteUrl', {
       value: myWebsite.websiteEndpoint,
+    });
+
+    // Output the CloudFront distribution URL
+    new TerraformOutput(this, 'cloudfrontUrl', {
+      value: `https://${myCloudfrontDistribution.domainName}`,
     });
   }
 }
