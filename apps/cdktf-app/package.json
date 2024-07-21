@@ -17,6 +17,7 @@
     "upgrade:next": "npm i cdktf@next cdktf-cli@next"
   },
   "dependencies": {
+    "@cdktf/provider-docker": "^11.0.0",
     "@ts-journey/api": "workspace:^",
     "@ts-journey/common": "workspace:^",
     "@ts-journey/next-app": "workspace:^",
@@ -26,7 +27,8 @@
   },
   "devDependencies": {
     "cdktf-cli": "^0.20.8",
-    "eslint": "^8.46.0"
+    "eslint": "^8.46.0",
+    "ts-node": "^10.9.1"
   },
   "engines": {
     "node": ">=18.0"

@@ -3621,6 +3621,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cdktf/provider-docker@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@cdktf/provider-docker@npm:11.0.0"
+  peerDependencies:
+    cdktf: ^0.20.0
+    constructs: ^10.3.0
+  checksum: a0585b645035abb4e190132f66c54f190a08db04487b2b64b27a6a3f2e71ab69a8af46673c4a8f1c151c5f0da4c09cd02a3f098511a1835fa67140f3c5029e2a
+  languageName: node
+  linkType: hard
+
 "@cdktf/provider-generator@npm:0.20.8":
   version: 0.20.8
   resolution: "@cdktf/provider-generator@npm:0.20.8"
@@ -7942,13 +7952,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ts-journey/cdktf-app@workspace:apps/cdktf-app"
   dependencies:
+    "@cdktf/provider-docker": ^11.0.0
     "@ts-journey/api": "workspace:^"
     "@ts-journey/common": "workspace:^"
     "@ts-journey/next-app": "workspace:^"
     "@ts-journey/vite-app": "workspace:^"
     cdktf: ^0.20.8
+    cdktf-cli: ^0.20.8
     constructs: ^10.3.0
     eslint: ^8.46.0
+    ts-node: ^10.9.1
   languageName: unknown
   linkType: soft
 
@@ -21738,7 +21751,6 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^17.7.1
     "@commitlint/config-conventional": ^17.7.0
-    cdktf-cli: ^0.20.8
     commitlint-config-jira: ^1.6.4
     commitlint-plugin-function-rules: ^2.0.2
     commitlint-plugin-jira-rules: ^1.6.4
