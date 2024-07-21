@@ -1,10 +1,7 @@
 import { Construct } from 'constructs';
 import { App, AssetType, S3Backend, TerraformAsset, TerraformOutput, TerraformStack } from 'cdktf';
-import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3DirectoryBucket, s3BucketObject, s3BucketPolicy } from '@cdktf/provider-aws';
+import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3Object, s3BucketPublicAccessBlock } from '@cdktf/provider-aws';
 
-import { CloudfrontDistribution } from '@cdktf/provider-aws/lib/cloudfront-distribution';
-import { CloudfrontOriginAccessControl } from '@cdktf/provider-aws/lib/cloudfront-origin-access-control';
-import { DataAwsCallerIdentity } from '@cdktf/provider-aws/lib/data-aws-caller-identity';
 import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
 import { S3BucketPolicy } from '@cdktf/provider-aws/lib/s3-bucket-policy';
 import * as fs from 'fs';
@@ -30,26 +27,17 @@ class MyStack extends TerraformStack {
     const assetPath = '/Users/simon.verhoeven/Documents/workspace/typescript-journey/apps/vite-app/dist';
 
     const myBucket = new s3Bucket.S3Bucket(this, 'my-bucket', {
-      bucket: 'cdktf-aws-demo-website-bucket',
+      bucket: 'cdktf-aws-demo-website-bucket-3',
     });
 
-    // new s3BucketPolicy.S3BucketPolicy(this, 'bucket-policy', {
-    //   bucket: myBucket.bucket,
-    //   policy: JSON.stringify({
-    //     Version: '2012-10-17',
-    //     Statement: [
-    //       {
-    //         Sid: 'PublicReadGetObject',
-    //         Effect: 'Allow',
-    //         Principal: '*',
-    //         Action: 's3:GetObject',
-    //         Resource: `arn:aws:s3:::${myBucket.bucket}/*`,
-    //       },
-    //     ],
-    //   }),
-    // });
+    const publicAccessBlock = new s3BucketPublicAccessBlock.S3BucketPublicAccessBlock(this, 'MyBucketPublicAccessBlock', {
+      bucket: myBucket.id,
+      blockPublicAcls: false,
+      blockPublicPolicy: false,
+      ignorePublicAcls: false,
+      restrictPublicBuckets: false,
+    });
 
-    // const current = new DataAwsCallerIdentity(this, 'current', {});
     const oacPolicyDocument = new DataAwsIamPolicyDocument(this, 'oacPolicyDocument', {
       statement: [
         {
@@ -64,9 +52,11 @@ class MyStack extends TerraformStack {
         },
       ],
     });
+
     new S3BucketPolicy(this, 's3BucketPolicy', {
       bucket: myBucket.id,
       policy: oacPolicyDocument.json,
+      dependsOn: [publicAccessBlock],
     });
 
     fs.readdirSync(assetPath, { recursive: true }).forEach((file) => {
@@ -81,20 +71,13 @@ class MyStack extends TerraformStack {
         type: AssetType.FILE,
       });
 
-      new s3BucketObject.S3BucketObject(this, `object-${file}`, {
+      new s3Object.S3Object(this, `object-${file}`, {
         bucket: myBucket.bucket,
         key: file,
         source: asset.path,
         contentType: mime.lookup(file).toString(),
       });
     });
-
-    // new s3BucketObject.S3BucketObject(this, 's3-bucket-object', {
-    //   // forEach:
-    //   bucket: myBucket.bucket,
-    //   key: asset.fileName,
-    //   source: asset.path, // returns a posix path
-    // });
 
     const myWebsite = new s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration(this, 'bucket-website', {
       bucket: myBucket.bucket,
