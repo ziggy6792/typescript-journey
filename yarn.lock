@@ -3621,6 +3621,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cdktf/provider-aws@npm:^19.27.0":
+  version: 19.27.0
+  resolution: "@cdktf/provider-aws@npm:19.27.0"
+  peerDependencies:
+    cdktf: ^0.20.0
+    constructs: ^10.3.0
+  checksum: f0ae776340c76bc5f353abb56f2f0006435a0d8ed3a17531017c518ee4cdc687165cb3dc1bdc2e8164fd97549e6c24f7a476e57e57194718d269fef4b2e89c08
+  languageName: node
+  linkType: hard
+
 "@cdktf/provider-docker@npm:^11.0.0":
   version: 11.0.0
   resolution: "@cdktf/provider-docker@npm:11.0.0"
@@ -7952,6 +7962,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ts-journey/cdktf-app@workspace:apps/cdktf-app"
   dependencies:
+    "@cdktf/provider-aws": ^19.27.0
     "@cdktf/provider-docker": ^11.0.0
     "@ts-journey/api": "workspace:^"
     "@ts-journey/common": "workspace:^"

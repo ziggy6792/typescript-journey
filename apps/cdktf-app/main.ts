@@ -1,33 +1,21 @@
 import { Construct } from 'constructs';
-import { App, TerraformStack } from 'cdktf';
-import { container, image, provider } from '@cdktf/provider-docker';
+import { App, S3Backend, TerraformStack } from 'cdktf';
+import { provider } from '@cdktf/provider-aws';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    // Add Docker provider
-    new provider.DockerProvider(this, 'docker', {
-      // Not sure why default doesnt work, got this from docker context ls
-      host: 'unix:///Users/simon.verhoeven/.docker/run/docker.sock',
+    new provider.AwsProvider(this, 'AWS', {
+      region: 'ap-southeast-1',
     });
 
-    // define resources here
-
-    const myImage = new image.Image(this, 'image', {
-      name: 'nginx:latest',
-      keepLocally: false,
-    });
-
-    const myContainer = new container.Container(this, 'nginxContainer', {
-      image: myImage.name,
-      name: 'demo',
-      ports: [
-        {
-          internal: 80,
-          external: 8000,
-        },
-      ],
+    // Only one backend is supported by Terraform
+    // S3 Backend - https://www.terraform.io/docs/backends/types/s3.html
+    new S3Backend(this, {
+      bucket: 'cdktf-aws-demo-bucket',
+      region: 'ap-southeast-1',
+      key: 'state',
     });
   }
 }
