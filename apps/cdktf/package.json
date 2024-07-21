@@ -1,5 +1,5 @@
 {
-  "name": "cdktf",
+  "name": "@ts-journey/cdktf",
   "version": "1.0.0",
   "main": "main.js",
   "types": "main.ts",
@@ -15,6 +15,17 @@
     "test:watch": "jest --watch",
     "upgrade": "npm i cdktf@latest cdktf-cli@latest",
     "upgrade:next": "npm i cdktf@next cdktf-cli@next"
+  },
+  "dependencies": {
+    "@ts-journey/api": "workspace:^",
+    "@ts-journey/common": "workspace:^",
+    "@ts-journey/next-app": "workspace:^",
+    "@ts-journey/vite-app": "workspace:^",
+    "cdktf": "^0.20.8",
+    "constructs": "^10.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.46.0"
   },
   "engines": {
     "node": ">=18.0"
