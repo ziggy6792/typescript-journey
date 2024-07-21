@@ -1,5 +1,5 @@
 {
-  "name": "@ts-journey/cdktf",
+  "name": "@ts-journey/cdktf-app",
   "version": "1.0.0",
   "main": "main.js",
   "types": "main.ts",

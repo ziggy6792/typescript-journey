@@ -7938,9 +7938,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@ts-journey/cdktf@workspace:apps/cdktf":
+"@ts-journey/cdktf-app@workspace:apps/cdktf-app":
   version: 0.0.0-use.local
-  resolution: "@ts-journey/cdktf@workspace:apps/cdktf"
+  resolution: "@ts-journey/cdktf-app@workspace:apps/cdktf-app"
   dependencies:
     "@ts-journey/api": "workspace:^"
     "@ts-journey/common": "workspace:^"
