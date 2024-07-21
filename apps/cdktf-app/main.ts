@@ -21,9 +21,11 @@ class MyStack extends TerraformStack {
       key: 'state',
     });
 
+    const assetPath = '/Users/simon.verhoeven/Documents/workspace/typescript-journey/apps/vite-app/dist';
+
     // Define a local provisioner to sync the local directory with the S3 bucket
     const asset = new TerraformAsset(this, 'sync-asset', {
-      path: '/Users/simon.verhoeven/Documents/workspace/typescript-journey/apps/vite-app/dist',
+      path: assetPath,
       type: AssetType.DIRECTORY,
     });
 
@@ -31,12 +33,18 @@ class MyStack extends TerraformStack {
       bucket: 'cdktf-aws-demo-website-bucket',
     });
 
-    new s3BucketObject.S3BucketObject(this, 's3-bucket-object', {
-      // forEach:
-      bucket: myBucket.bucket,
-      key: asset.fileName,
-      source: asset.path, // returns a posix path
+    fs.readdirSync(assetPath, { recursive: true }).forEach((file) => {
+      const filePath = path.join(assetPath, file.toString());
+
+      console.log(filePath);
     });
+
+    // new s3BucketObject.S3BucketObject(this, 's3-bucket-object', {
+    //   // forEach:
+    //   bucket: myBucket.bucket,
+    //   key: asset.fileName,
+    //   source: asset.path, // returns a posix path
+    // });
 
     // new s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration(this, 'bucket-website', {
     //   bucket: myBucket.bucket,
