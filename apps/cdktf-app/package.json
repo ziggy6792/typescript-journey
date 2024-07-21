@@ -25,6 +25,7 @@
     "constructs": "^10.3.0"
   },
   "devDependencies": {
+    "cdktf-cli": "^0.20.8",
     "eslint": "^8.46.0"
   },
   "engines": {
