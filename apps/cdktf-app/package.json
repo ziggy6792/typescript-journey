@@ -24,9 +24,11 @@
     "@ts-journey/next-app": "workspace:^",
     "@ts-journey/vite-app": "workspace:^",
     "cdktf": "^0.20.8",
-    "constructs": "^10.3.0"
+    "constructs": "^10.3.0",
+    "mime-types": "^2.1.35"
   },
   "devDependencies": {
+    "@types/mime-types": "^2",
     "cdktf-cli": "^0.20.8",
     "eslint": "^8.46.0",
     "ts-node": "^10.9.1"

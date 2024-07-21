@@ -9,17 +9,7 @@ import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-p
 import { S3BucketPolicy } from '@cdktf/provider-aws/lib/s3-bucket-policy';
 import * as fs from 'fs';
 import * as path from 'path';
-
-const getContentType = (fileName: string): string => {
-  if (fileName.endsWith('.html')) return 'text/html';
-  if (fileName.endsWith('.js')) return 'application/javascript';
-  if (fileName.endsWith('.css')) return 'text/css';
-  if (fileName.endsWith('.png')) return 'image/png';
-  if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) return 'image/jpeg';
-  if (fileName.endsWith('.svg')) return 'image/svg+xml';
-  if (fileName.endsWith('.json')) return 'application/json';
-  return 'application/octet-stream'; // Default content type
-};
+import * as mime from 'mime-types';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -95,7 +85,7 @@ class MyStack extends TerraformStack {
         bucket: myBucket.bucket,
         key: file,
         source: asset.path,
-        contentType: getContentType(file),
+        contentType: mime.lookup(file).toString(),
       });
     });
 
