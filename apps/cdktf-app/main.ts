@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { App, AssetType, S3Backend, TerraformAsset, TerraformStack } from 'cdktf';
+import { App, AssetType, S3Backend, TerraformAsset, TerraformOutput, TerraformStack } from 'cdktf';
 import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3DirectoryBucket, s3BucketObject } from '@cdktf/provider-aws';
 
 import * as fs from 'fs';
@@ -53,15 +53,20 @@ class MyStack extends TerraformStack {
     //   source: asset.path, // returns a posix path
     // });
 
-    // new s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration(this, 'bucket-website', {
-    //   bucket: myBucket.bucket,
-    //   indexDocument: {
-    //     suffix: 'index.html',
-    //   },
-    //   errorDocument: {
-    //     key: '5xx.html',
-    //   },
-    // });
+    const myWebsite = new s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration(this, 'bucket-website', {
+      bucket: myBucket.bucket,
+      indexDocument: {
+        suffix: 'index.html',
+      },
+      errorDocument: {
+        key: '5xx.html',
+      },
+    });
+
+    // Output the website URL
+    new TerraformOutput(this, 'websiteUrl', {
+      value: myWebsite.websiteEndpoint,
+    });
   }
 }
 
