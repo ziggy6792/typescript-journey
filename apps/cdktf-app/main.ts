@@ -1,9 +1,25 @@
 import { Construct } from 'constructs';
 import { App, AssetType, S3Backend, TerraformAsset, TerraformOutput, TerraformStack } from 'cdktf';
-import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3DirectoryBucket, s3BucketObject } from '@cdktf/provider-aws';
+import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3DirectoryBucket, s3BucketObject, s3BucketPolicy } from '@cdktf/provider-aws';
 
+import { CloudfrontDistribution } from '@cdktf/provider-aws/lib/cloudfront-distribution';
+import { CloudfrontOriginAccessControl } from '@cdktf/provider-aws/lib/cloudfront-origin-access-control';
+import { DataAwsCallerIdentity } from '@cdktf/provider-aws/lib/data-aws-caller-identity';
+import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
+import { S3BucketPolicy } from '@cdktf/provider-aws/lib/s3-bucket-policy';
 import * as fs from 'fs';
 import * as path from 'path';
+
+const getContentType = (fileName: string): string => {
+  if (fileName.endsWith('.html')) return 'text/html';
+  if (fileName.endsWith('.js')) return 'application/javascript';
+  if (fileName.endsWith('.css')) return 'text/css';
+  if (fileName.endsWith('.png')) return 'image/png';
+  if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) return 'image/jpeg';
+  if (fileName.endsWith('.svg')) return 'image/svg+xml';
+  if (fileName.endsWith('.json')) return 'application/json';
+  return 'application/octet-stream'; // Default content type
+};
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -27,6 +43,42 @@ class MyStack extends TerraformStack {
       bucket: 'cdktf-aws-demo-website-bucket',
     });
 
+    // new s3BucketPolicy.S3BucketPolicy(this, 'bucket-policy', {
+    //   bucket: myBucket.bucket,
+    //   policy: JSON.stringify({
+    //     Version: '2012-10-17',
+    //     Statement: [
+    //       {
+    //         Sid: 'PublicReadGetObject',
+    //         Effect: 'Allow',
+    //         Principal: '*',
+    //         Action: 's3:GetObject',
+    //         Resource: `arn:aws:s3:::${myBucket.bucket}/*`,
+    //       },
+    //     ],
+    //   }),
+    // });
+
+    // const current = new DataAwsCallerIdentity(this, 'current', {});
+    const oacPolicyDocument = new DataAwsIamPolicyDocument(this, 'oacPolicyDocument', {
+      statement: [
+        {
+          actions: ['s3:GetObject'],
+          resources: [`${myBucket.arn}/*`],
+          principals: [
+            {
+              type: 'AWS',
+              identifiers: ['*'], // Allows public access
+            },
+          ],
+        },
+      ],
+    });
+    new S3BucketPolicy(this, 's3BucketPolicy', {
+      bucket: myBucket.id,
+      policy: oacPolicyDocument.json,
+    });
+
     fs.readdirSync(assetPath, { recursive: true }).forEach((file) => {
       if (typeof file !== 'string') return;
 
@@ -43,6 +95,7 @@ class MyStack extends TerraformStack {
         bucket: myBucket.bucket,
         key: file,
         source: asset.path,
+        contentType: getContentType(file),
       });
     });
 
@@ -59,7 +112,7 @@ class MyStack extends TerraformStack {
         suffix: 'index.html',
       },
       errorDocument: {
-        key: '5xx.html',
+        key: '404.html',
       },
     });
 
