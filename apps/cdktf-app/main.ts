@@ -23,20 +23,27 @@ class MyStack extends TerraformStack {
 
     const assetPath = '/Users/simon.verhoeven/Documents/workspace/typescript-journey/apps/vite-app/dist';
 
-    // Define a local provisioner to sync the local directory with the S3 bucket
-    const asset = new TerraformAsset(this, 'sync-asset', {
-      path: assetPath,
-      type: AssetType.DIRECTORY,
-    });
-
     const myBucket = new s3Bucket.S3Bucket(this, 'my-bucket', {
       bucket: 'cdktf-aws-demo-website-bucket',
     });
 
     fs.readdirSync(assetPath, { recursive: true }).forEach((file) => {
-      const filePath = path.join(assetPath, file.toString());
+      if (typeof file !== 'string') return;
 
-      console.log(filePath);
+      const filePath = path.join(assetPath, file);
+
+      if (fs.statSync(filePath).isDirectory()) return;
+
+      const asset = new TerraformAsset(this, `asset-${file}`, {
+        path: filePath,
+        type: AssetType.FILE,
+      });
+
+      new s3BucketObject.S3BucketObject(this, `object-${file}`, {
+        bucket: myBucket.bucket,
+        key: file,
+        source: asset.path,
+      });
     });
 
     // new s3BucketObject.S3BucketObject(this, 's3-bucket-object', {
