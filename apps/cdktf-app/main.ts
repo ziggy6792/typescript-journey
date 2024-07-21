@@ -24,8 +24,6 @@ class MyStack extends TerraformStack {
       key: 'state',
     });
 
-    const assetPath = '/Users/simon.verhoeven/Documents/workspace/typescript-journey/apps/vite-app/dist';
-
     const myBucket = new s3Bucket.S3Bucket(this, 'my-bucket', {
       bucket: 'cdktf-aws-demo-website-bucket-3',
     });
@@ -59,10 +57,12 @@ class MyStack extends TerraformStack {
       dependsOn: [publicAccessBlock],
     });
 
-    fs.readdirSync(assetPath, { recursive: true }).forEach((file) => {
+    const spaPath = path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist'));
+
+    fs.readdirSync(spaPath, { recursive: true }).forEach((file) => {
       if (typeof file !== 'string') return;
 
-      const filePath = path.join(assetPath, file);
+      const filePath = path.join(spaPath, file);
 
       if (fs.statSync(filePath).isDirectory()) return;
 
