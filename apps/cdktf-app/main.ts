@@ -126,38 +126,31 @@ class MyStack extends TerraformStack {
     //   },
     // });
 
-    const myCloudfrontDistribution = new cloudfrontDistribution.CloudfrontDistribution(this, 'distribution', {
-      customErrorResponse: [
+    const myCloudfrontDistribution = new cloudfrontDistribution.CloudfrontDistribution(this, 'my-cloudfront-distribution', {
+      origin: [
         {
-          errorCode: 403,
-          responseCode: 200,
-          responsePagePath: '/',
+          domainName: myBucket.bucketRegionalDomainName,
+          originId: 's3-my-bucket',
+          s3OriginConfig: {
+            originAccessIdentity: '',
+          },
         },
       ],
       enabled: true,
+      isIpv6Enabled: true,
       defaultRootObject: 'index.html',
       defaultCacheBehavior: {
         allowedMethods: ['GET', 'HEAD'],
         cachedMethods: ['GET', 'HEAD'],
-        targetOriginId: myBucket.id,
-        forwardedValues: {
-          queryString: true,
-          cookies: {
-            forward: 'all',
-          },
-          headers: ['Host', 'Accept-Datetime', 'Accept-Encoding', 'Accept-Language', 'User-Agent', 'Referer', 'Origin', 'X-Forwarded-Host'],
-        },
+        targetOriginId: 's3-my-bucket',
         viewerProtocolPolicy: 'redirect-to-https',
-        minTtl: 0,
-        defaultTtl: 0,
-        maxTtl: 0,
-      },
-      origin: [
-        {
-          originId: myBucket.id,
-          domainName: myBucket.bucketRegionalDomainName,
+        forwardedValues: {
+          queryString: false,
+          cookies: {
+            forward: 'none',
+          },
         },
-      ],
+      },
       restrictions: {
         geoRestriction: {
           restrictionType: 'none',
