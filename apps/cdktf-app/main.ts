@@ -1,6 +1,8 @@
 import { Construct } from 'constructs';
 import { App, S3Backend, TerraformStack } from 'cdktf';
 import { provider } from '@cdktf/provider-aws';
+import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
+import { S3BucketObject } from '@cdktf/provider-aws/lib/s3-bucket-object';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -16,6 +18,18 @@ class MyStack extends TerraformStack {
       bucket: 'cdktf-aws-demo-bucket',
       region: 'ap-southeast-1',
       key: 'state',
+    });
+
+    // Create an S3 bucket
+    const bucket = new S3Bucket(this, 'my-bucket', {
+      bucket: 'my-cdktf-demo-bucket',
+    });
+
+    // Create a text file in the S3 bucket
+    new S3BucketObject(this, 'my-bucket-object', {
+      bucket: bucket.bucket,
+      key: 'hello.txt',
+      content: 'Hello, CDK for Terraform!',
     });
   }
 }
