@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@ts-journey/common": "workspace:^",
-    "aws-cdk-lib": "2.91.0",
-    "constructs": "10.2.69",
-    "sst": "2.24.20"
+    "aws-cdk-lib": "2.149.0",
+    "constructs": "10.3.0",
+    "sst": "2.43.4"
   },
   "devDependencies": {
     "eslint": "^8.46.0"
