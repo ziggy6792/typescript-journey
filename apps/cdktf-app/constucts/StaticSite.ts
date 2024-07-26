@@ -1,19 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import { Construct } from 'constructs';
-import { AssetType, TerraformAsset, TerraformStack } from 'cdktf';
-import { s3Bucket, s3Object, cloudfrontDistribution as cfnDist, cloudfrontOriginAccessControl as cfnOAC } from '@cdktf/provider-aws';
+import { s3Bucket, cloudfrontDistribution as cfnDist, cloudfrontOriginAccessControl as cfnOAC } from '@cdktf/provider-aws';
 import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
 import { S3BucketPolicy } from '@cdktf/provider-aws/lib/s3-bucket-policy';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as mime from 'mime-types';
-import { DataAwsCallerIdentity } from '@cdktf/provider-aws/lib/data-aws-caller-identity';
-import * as crypto from 'crypto';
-
-// Function to create an MD5 hash
-const hashId = (input: string) => crypto.createHash('md5').update(input).digest('hex').slice(-8);
-
-const getUniqueId = (scope: Construct, id: string) => `${TerraformStack.of(scope)}-${scope.node.id}-${id}-${hashId(scope.node.id)}`.toLowerCase();
+import { getUniqueId } from '../utils/util';
+import { S3DirDeploy } from './S3DirDeploy';
 
 interface StaticSiteProps {
   path: string;
@@ -25,37 +16,18 @@ export class StaticSite extends Construct {
 
   public readonly bucket: s3Bucket.S3Bucket;
 
-  constructor(scope: Construct, id: string, { path: spaPath, bucketName: _bucketName }: StaticSiteProps) {
+  constructor(scope: Construct, id: string, { path, bucketName }: StaticSiteProps) {
     super(scope, id);
 
-    const bucketName = _bucketName ?? getUniqueId(this, 'bucket');
-
-    this.bucket = new s3Bucket.S3Bucket(this, 's3-bucket', {
-      bucket: bucketName,
+    const s3DirDeploy = new S3DirDeploy(this, 's3-dir-deploy', {
+      path,
+      bucketName,
     });
 
-    fs.readdirSync(spaPath, { recursive: true }).forEach((file) => {
-      if (typeof file !== 'string') return;
+    this.bucket = s3DirDeploy.bucket;
 
-      const filePath = path.join(spaPath, file);
-
-      if (fs.statSync(filePath).isDirectory()) return;
-
-      const asset = new TerraformAsset(this, `asset-${file}`, {
-        path: filePath,
-        type: AssetType.FILE,
-      });
-
-      new s3Object.S3Object(this, `object-${file}`, {
-        bucket: this.bucket.bucket,
-        key: file,
-        source: asset.path,
-        contentType: mime.lookup(file).toString(),
-      });
-    });
-
-    const originAccessControl = new cfnOAC.CloudfrontOriginAccessControl(this, 'site-oac', {
-      name: 'site-oac',
+    const originAccessControl = new cfnOAC.CloudfrontOriginAccessControl(this, 'oac', {
+      name: getUniqueId(this, 'oac'),
       description: 'OAC for accessing S3 bucket',
       originAccessControlOriginType: 's3',
       signingBehavior: 'always',
