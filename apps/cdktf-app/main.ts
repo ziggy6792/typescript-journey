@@ -10,6 +10,7 @@ import * as mime from 'mime-types';
 import { AcmCertificate } from '@cdktf/provider-aws/lib/acm-certificate';
 import { DataAwsCallerIdentity } from '@cdktf/provider-aws/lib/data-aws-caller-identity';
 import { StaticSite } from './constucts/StaticSite';
+import { SimpleStaticSite } from './constucts/SimpleStaticSite';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -27,6 +28,19 @@ class MyStack extends TerraformStack {
       key: 'state',
     });
 
+    const simpleStaticSite = new SimpleStaticSite(this, 'simple-static-site', {
+      path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),
+    });
+
+    // Output the S3 Website URL
+    new TerraformOutput(this, 'simpleWebsiteUrl', {
+      value: simpleStaticSite.url,
+    });
+
+    new TerraformOutput(this, 'simpleWebsiteBucket', {
+      value: simpleStaticSite.bucket.bucket,
+    });
+
     const staticStie = new StaticSite(this, 'static-site', {
       path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),
     });
@@ -39,10 +53,6 @@ class MyStack extends TerraformStack {
     new TerraformOutput(this, 'websiteBucket', {
       value: staticStie.bucket.bucket,
     });
-
-    // const staticStie2 = new StaticSite(this, 'static-site-2', {
-    //   path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),
-    // });
   }
 }
 
