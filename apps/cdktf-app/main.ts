@@ -130,7 +130,7 @@ class MyStack extends TerraformStack {
       origin: [
         {
           domainName: myBucket.bucketRegionalDomainName,
-          originId: 's3-my-bucket',
+          originId: myBucket.id,
           s3OriginConfig: {
             originAccessIdentity: '',
           },
@@ -142,7 +142,7 @@ class MyStack extends TerraformStack {
       defaultCacheBehavior: {
         allowedMethods: ['GET', 'HEAD'],
         cachedMethods: ['GET', 'HEAD'],
-        targetOriginId: 's3-my-bucket',
+        targetOriginId: myBucket.id,
         viewerProtocolPolicy: 'redirect-to-https',
         forwardedValues: {
           queryString: false,
