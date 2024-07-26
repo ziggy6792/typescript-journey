@@ -1,54 +1,31 @@
+/* eslint-disable max-classes-per-file */
 import { Construct } from 'constructs';
-import { App, AssetType, S3Backend, TerraformAsset, TerraformOutput, TerraformStack } from 'cdktf';
-import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3Object, s3BucketPublicAccessBlock, cloudfrontDistribution as cfnDist } from '@cdktf/provider-aws';
-
+import { AssetType, TerraformAsset, TerraformOutput } from 'cdktf';
+import { s3Bucket, s3Object, cloudfrontDistribution as cfnDist } from '@cdktf/provider-aws';
 import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
 import { S3BucketPolicy } from '@cdktf/provider-aws/lib/s3-bucket-policy';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as mime from 'mime-types';
-import { AcmCertificate } from '@cdktf/provider-aws/lib/acm-certificate';
 import { DataAwsCallerIdentity } from '@cdktf/provider-aws/lib/data-aws-caller-identity';
+import ShortUniqueId from 'short-unique-id';
 
-class MyStack extends TerraformStack {
-  constructor(scope: Construct, id: string) {
+const uid = new ShortUniqueId({ length: 8 });
+
+interface StaticSiteProps {
+  path: string;
+  bucketName?: string;
+}
+
+export class StaticSite extends Construct {
+  public readonly url: string;
+
+  constructor(scope: Construct, id: string, { path: spaPath, bucketName = `${id}-bucket` }: StaticSiteProps) {
     super(scope, id);
 
-    const useProvider = new provider.AwsProvider(this, 'AWS', {
-      region: 'ap-southeast-1',
+    const bucket = new s3Bucket.S3Bucket(this, 's3-bucket', {
+      bucket: bucketName,
     });
-
-    // Only one backend is supported by Terraform
-    // S3 Backend - https://www.terraform.io/docs/backends/types/s3.html
-    new S3Backend(this, {
-      bucket: 'cdktf-aws-demo-bucket',
-      region: 'ap-southeast-1',
-      key: 'state',
-    });
-
-    const myBucket = new s3Bucket.S3Bucket(this, 'my-bucket', {
-      bucket: 'cdktf-aws-demo-website-bucket-5',
-    });
-
-    // const publicAccessBlock = new s3BucketPublicAccessBlock.S3BucketPublicAccessBlock(this, 'MyBucketPublicAccessBlock', {
-    //   bucket: myBucket.id,
-    //   blockPublicAcls: false,
-    //   blockPublicPolicy: false,
-    //   ignorePublicAcls: false,
-    //   restrictPublicBuckets: false,
-    // });
-
-    // const website = new s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration(this, 'bucket-website', {
-    //   bucket: myBucket.bucket,
-    //   indexDocument: {
-    //     suffix: 'index.html',
-    //   },
-    //   errorDocument: {
-    //     key: '404.html',
-    //   },
-    // });
-
-    const spaPath = path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist'));
 
     fs.readdirSync(spaPath, { recursive: true }).forEach((file) => {
       if (typeof file !== 'string') return;
@@ -63,18 +40,18 @@ class MyStack extends TerraformStack {
       });
 
       new s3Object.S3Object(this, `object-${file}`, {
-        bucket: myBucket.bucket,
+        bucket: bucket.bucket,
         key: file,
         source: asset.path,
         contentType: mime.lookup(file).toString(),
       });
     });
 
-    const distribution = new cfnDist.CloudfrontDistribution(this, 'my-cloudfront-distribution', {
+    const distribution = new cfnDist.CloudfrontDistribution(this, 'cloudfront-distribution', {
       origin: [
         {
-          domainName: myBucket.bucketRegionalDomainName,
-          originId: myBucket.id,
+          domainName: bucket.bucketRegionalDomainName,
+          originId: bucket.id,
           s3OriginConfig: {
             originAccessIdentity: '',
           },
@@ -86,7 +63,7 @@ class MyStack extends TerraformStack {
       defaultCacheBehavior: {
         allowedMethods: ['GET', 'HEAD'],
         cachedMethods: ['GET', 'HEAD'],
-        targetOriginId: myBucket.id,
+        targetOriginId: bucket.id,
         viewerProtocolPolicy: 'redirect-to-https',
         forwardedValues: {
           queryString: false,
@@ -111,7 +88,7 @@ class MyStack extends TerraformStack {
       statement: [
         {
           actions: ['s3:GetObject'],
-          resources: [`${myBucket.arn}/*`],
+          resources: [`${bucket.arn}/*`],
           principals: [
             {
               identifiers: ['cloudfront.amazonaws.com'],
@@ -130,22 +107,10 @@ class MyStack extends TerraformStack {
     });
 
     new S3BucketPolicy(this, 's3BucketPolicy', {
-      bucket: myBucket.id,
+      bucket: bucket.id,
       policy: oacPolicyDocument.json,
     });
 
-    // Output the website URL
-    // new TerraformOutput(this, 'websiteUrl', {
-    //   value: `https://${website.websiteEndpoint}`,
-    // });
-
-    // Output the CloudFront distribution URL
-    new TerraformOutput(this, 'cloudfrontUrl', {
-      value: `https://${distribution.domainName}`,
-    });
+    this.url = `https://${distribution.domainName}`;
   }
 }
-
-const app = new App();
-new MyStack(app, 'cdktf');
-app.synth();
