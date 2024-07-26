@@ -27,7 +27,7 @@ class MyStack extends TerraformStack {
     });
 
     const myBucket = new s3Bucket.S3Bucket(this, 'my-bucket', {
-      bucket: 'cdktf-aws-demo-website-bucket-3',
+      bucket: 'cdktf-aws-demo-website-bucket-4',
     });
 
     // const publicAccessBlock = new s3BucketPublicAccessBlock.S3BucketPublicAccessBlock(this, 'MyBucketPublicAccessBlock', {
@@ -36,6 +36,16 @@ class MyStack extends TerraformStack {
     //   blockPublicPolicy: false,
     //   ignorePublicAcls: false,
     //   restrictPublicBuckets: false,
+    // });
+
+    // const website = new s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration(this, 'bucket-website', {
+    //   bucket: myBucket.bucket,
+    //   indexDocument: {
+    //     suffix: 'index.html',
+    //   },
+    //   errorDocument: {
+    //     key: '404.html',
+    //   },
     // });
 
     const spaPath = path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist'));
@@ -59,52 +69,6 @@ class MyStack extends TerraformStack {
         contentType: mime.lookup(file).toString(),
       });
     });
-
-    const website = new s3BucketWebsiteConfiguration.S3BucketWebsiteConfiguration(this, 'bucket-website', {
-      bucket: myBucket.bucket,
-      indexDocument: {
-        suffix: 'index.html',
-      },
-      errorDocument: {
-        key: '404.html',
-      },
-    });
-
-    // CloudFront Distribution
-    // const myCloudfrontDistribution = new cloudfrontDistribution.CloudfrontDistribution(this, 'my-cloudfront-distribution', {
-    //   origin: [
-    //     {
-    //       domainName: myBucket.bucketRegionalDomainName,
-    //       originId: 's3-my-bucket',
-    //       s3OriginConfig: {
-    //         originAccessIdentity: '',
-    //       },
-    //     },
-    //   ],
-    //   enabled: true,
-    //   isIpv6Enabled: true,
-    //   defaultRootObject: 'index.html',
-    //   defaultCacheBehavior: {
-    //     allowedMethods: ['GET', 'HEAD'],
-    //     cachedMethods: ['GET', 'HEAD'],
-    //     targetOriginId: 's3-my-bucket',
-    //     viewerProtocolPolicy: 'redirect-to-https',
-    //     forwardedValues: {
-    //       queryString: false,
-    //       cookies: {
-    //         forward: 'none',
-    //       },
-    //     },
-    //   },
-    //   restrictions: {
-    //     geoRestriction: {
-    //       restrictionType: 'none',
-    //     },
-    //   },
-    //   viewerCertificate: {
-    //     cloudfrontDefaultCertificate: true,
-    //   },
-    // });
 
     const distribution = new cfnDist.CloudfrontDistribution(this, 'my-cloudfront-distribution', {
       origin: [
@@ -165,16 +129,15 @@ class MyStack extends TerraformStack {
       ],
     });
 
-    // new S3BucketPolicy(this, 's3BucketPolicy', {
-    //   bucket: myBucket.id,
-    //   policy: oacPolicyDocument.json,
-    //   dependsOn: [publicAccessBlock],
-    // });
+    new S3BucketPolicy(this, 's3BucketPolicy', {
+      bucket: myBucket.id,
+      policy: oacPolicyDocument.json,
+    });
 
     // Output the website URL
-    new TerraformOutput(this, 'websiteUrl', {
-      value: `https://${website.websiteEndpoint}`,
-    });
+    // new TerraformOutput(this, 'websiteUrl', {
+    //   value: `https://${website.websiteEndpoint}`,
+    // });
 
     // Output the CloudFront distribution URL
     new TerraformOutput(this, 'cloudfrontUrl', {
