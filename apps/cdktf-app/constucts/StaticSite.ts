@@ -1,16 +1,19 @@
 /* eslint-disable max-classes-per-file */
 import { Construct } from 'constructs';
-import { AssetType, TerraformAsset, TerraformOutput } from 'cdktf';
-import { s3Bucket, s3Object, cloudfrontDistribution as cfnDist } from '@cdktf/provider-aws';
+import { AssetType, TerraformAsset, TerraformStack } from 'cdktf';
+import { s3Bucket, s3Object, cloudfrontDistribution as cfnDist, cloudfrontOriginAccessControl as cfnOAC } from '@cdktf/provider-aws';
 import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
 import { S3BucketPolicy } from '@cdktf/provider-aws/lib/s3-bucket-policy';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as mime from 'mime-types';
 import { DataAwsCallerIdentity } from '@cdktf/provider-aws/lib/data-aws-caller-identity';
-import ShortUniqueId from 'short-unique-id';
+import * as crypto from 'crypto';
 
-const uid = new ShortUniqueId({ length: 8 });
+// Function to create an MD5 hash
+const hashId = (input: string) => crypto.createHash('md5').update(input).digest('hex').slice(-8);
+
+const getUniqueId = (scope: Construct, id: string) => `${TerraformStack.of(scope)}-${scope.node.id}-${id}-${hashId(scope.node.id)}`.toLowerCase();
 
 interface StaticSiteProps {
   path: string;
@@ -20,10 +23,14 @@ interface StaticSiteProps {
 export class StaticSite extends Construct {
   public readonly url: string;
 
-  constructor(scope: Construct, id: string, { path: spaPath, bucketName = `${id}-bucket` }: StaticSiteProps) {
+  public readonly bucket: s3Bucket.S3Bucket;
+
+  constructor(scope: Construct, id: string, { path: spaPath, bucketName: _bucketName }: StaticSiteProps) {
     super(scope, id);
 
-    const bucket = new s3Bucket.S3Bucket(this, 's3-bucket', {
+    const bucketName = _bucketName ?? getUniqueId(this, 'bucket');
+
+    this.bucket = new s3Bucket.S3Bucket(this, 's3-bucket', {
       bucket: bucketName,
     });
 
@@ -40,21 +47,30 @@ export class StaticSite extends Construct {
       });
 
       new s3Object.S3Object(this, `object-${file}`, {
-        bucket: bucket.bucket,
+        bucket: this.bucket.bucket,
         key: file,
         source: asset.path,
         contentType: mime.lookup(file).toString(),
       });
     });
 
+    const originAccessControl = new cfnOAC.CloudfrontOriginAccessControl(this, 'site-oac', {
+      name: 'site-oac',
+      description: 'OAC for accessing S3 bucket',
+      originAccessControlOriginType: 's3',
+      signingBehavior: 'always',
+      signingProtocol: 'sigv4',
+    });
+
     const distribution = new cfnDist.CloudfrontDistribution(this, 'cloudfront-distribution', {
       origin: [
         {
-          domainName: bucket.bucketRegionalDomainName,
-          originId: bucket.id,
+          domainName: this.bucket.bucketRegionalDomainName,
+          originId: this.bucket.id,
           s3OriginConfig: {
             originAccessIdentity: '',
           },
+          originAccessControlId: originAccessControl.id,
         },
       ],
       enabled: true,
@@ -63,7 +79,7 @@ export class StaticSite extends Construct {
       defaultCacheBehavior: {
         allowedMethods: ['GET', 'HEAD'],
         cachedMethods: ['GET', 'HEAD'],
-        targetOriginId: bucket.id,
+        targetOriginId: this.bucket.id,
         viewerProtocolPolicy: 'redirect-to-https',
         forwardedValues: {
           queryString: false,
@@ -82,13 +98,11 @@ export class StaticSite extends Construct {
       },
     });
 
-    const current = new DataAwsCallerIdentity(this, 'current', {});
-
-    const oacPolicyDocument = new DataAwsIamPolicyDocument(this, 'oacPolicyDocument', {
+    const oacPolicyDocument = new DataAwsIamPolicyDocument(this, 'oac-policy-dsocument', {
       statement: [
         {
           actions: ['s3:GetObject'],
-          resources: [`${bucket.arn}/*`],
+          resources: [`${this.bucket.arn}/*`],
           principals: [
             {
               identifiers: ['cloudfront.amazonaws.com'],
@@ -99,15 +113,15 @@ export class StaticSite extends Construct {
             {
               test: 'StringEquals',
               variable: 'AWS:SourceArn',
-              values: [`arn:aws:cloudfront::${current.accountId}:distribution/${distribution.id}}`],
+              values: [distribution.arn],
             },
           ],
         },
       ],
     });
 
-    new S3BucketPolicy(this, 's3BucketPolicy', {
-      bucket: bucket.id,
+    new S3BucketPolicy(this, 's3-bucket-policy', {
+      bucket: this.bucket.id,
       policy: oacPolicyDocument.json,
     });
 
