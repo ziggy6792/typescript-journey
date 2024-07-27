@@ -1,7 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { Construct } from 'constructs';
-import { TerraformStack } from 'cdktf';
+import { S3Backend, TerraformStack } from 'cdktf';
 import * as crypto from 'crypto';
+import { provider } from '@cdktf/provider-aws';
 
 // Function to create an MD5 hash
 const hashId = (input: string) => crypto.createHash('md5').update(input).digest('hex').slice(-8);
