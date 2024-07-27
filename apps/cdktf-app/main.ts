@@ -1,16 +1,11 @@
 import { Construct } from 'constructs';
-import { App, AssetType, S3Backend, TerraformAsset, TerraformOutput, TerraformStack } from 'cdktf';
-import { provider, s3BucketWebsiteConfiguration, s3Bucket, s3Object, s3BucketPublicAccessBlock, cloudfrontDistribution as cfnDist } from '@cdktf/provider-aws';
-
-import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
-import { S3BucketPolicy } from '@cdktf/provider-aws/lib/s3-bucket-policy';
-import * as fs from 'fs';
+import { App, S3Backend, TerraformOutput, TerraformStack } from 'cdktf';
+import { provider } from '@cdktf/provider-aws';
 import * as path from 'path';
-import * as mime from 'mime-types';
-import { AcmCertificate } from '@cdktf/provider-aws/lib/acm-certificate';
-import { DataAwsCallerIdentity } from '@cdktf/provider-aws/lib/data-aws-caller-identity';
 import { StaticSite } from './constucts/StaticSite';
 import { SimpleStaticSite } from './constucts/SimpleStaticSite';
+import { S3DirDeploy2 } from './constucts/S3DirDeploy2';
+// import { S3DirDeploy2 } from './constucts/S3DirDeploy2';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -52,6 +47,14 @@ class MyStack extends TerraformStack {
 
     new TerraformOutput(this, 'websiteBucket', {
       value: staticStie.bucket.bucket,
+    });
+
+    const s3DirDeploy2 = new S3DirDeploy2(this, 's3-dir-deploy-2', {
+      path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),
+    });
+
+    new TerraformOutput(this, 's3DirDeploy2Bucket', {
+      value: s3DirDeploy2.bucket.bucket,
     });
   }
 }

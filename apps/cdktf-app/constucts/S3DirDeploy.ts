@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { AssetType, TerraformAsset } from 'cdktf';
+import { AssetType, Fn, TerraformAsset } from 'cdktf';
 import { s3Bucket, s3Object } from '@cdktf/provider-aws';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -30,15 +30,11 @@ export class S3DirDeploy extends Construct {
 
       if (fs.statSync(filePath).isDirectory()) return;
 
-      const asset = new TerraformAsset(this, `asset-${file}`, {
-        path: filePath,
-        type: AssetType.FILE,
-      });
-
-      new s3Object.S3Object(this, `object-${file}`, {
+      new s3Object.S3Object(this, `s3-object-${file}`, {
         bucket: this.bucket.bucket,
         key: file,
-        source: asset.path,
+        source: filePath,
+        etag: Fn.filemd5(filePath),
         contentType: mime.lookup(file).toString(),
       });
     });
