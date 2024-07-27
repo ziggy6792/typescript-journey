@@ -11,6 +11,7 @@ interface S3DirDeployProps {
   bucketName?: string;
 }
 
+// Alternative implementation of S3DirDeploy using forech fileList
 export class S3DirDeploy2 extends Construct {
   public readonly bucket: s3Bucket.S3Bucket;
 
