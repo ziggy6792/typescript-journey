@@ -17,7 +17,7 @@ export class SimpleStaticSite extends Construct {
   constructor(scope: Construct, id: string, { path, bucketName }: SimpleStaticSiteProps) {
     super(scope, id);
 
-    const s3DirDeploy = new S3DirDeploy(this, 'simple-s3-dir-deploy', {
+    const s3DirDeploy = new S3DirDeploy(this, 's3-dir-deploy', {
       path,
       bucketName,
     });

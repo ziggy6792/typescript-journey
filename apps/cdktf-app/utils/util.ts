@@ -6,4 +6,8 @@ import * as crypto from 'crypto';
 // Function to create an MD5 hash
 const hashId = (input: string) => crypto.createHash('md5').update(input).digest('hex').slice(-8);
 
-export const getUniqueId = (scope: Construct, id: string) => `${TerraformStack.of(scope)}-${scope.node.id}-${id}-${hashId(scope.node.id)}`.toLowerCase();
+// Unique ID formed from the stack name, the construct ID, a descriptive id parameter, and the hash of parent construct ID, to lower case
+// E.g : cdktf-s3-dir-deploy-bucket-9c349b26
+// This ensures uniqueness of IDs across constructs
+export const getUniqueId = (scope: Construct, id: string) =>
+  `${TerraformStack.of(scope)}-${scope.node.id}-${id}-${hashId(scope.node.scope?.node?.id ?? scope.node.id)}`.toLowerCase();
