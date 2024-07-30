@@ -31,7 +31,8 @@ export const postRouter = createTRPCRouter({
     const command = new PutObjectCommand({
       ACL: 'public-read',
       Key: crypto.randomUUID(),
-      Bucket: Bucket['file-uploads'].bucketName,
+      // Bucket: Bucket['file-uploads'].bucketName,
+      Bucket: 'file-uploads',
     });
     const url = (await getSignedUrl(new S3Client({}), command)) as string;
     return url;

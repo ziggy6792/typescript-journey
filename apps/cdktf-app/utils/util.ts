@@ -13,4 +13,4 @@ const hashId = (input: string) => crypto.createHash('md5').update(input).digest(
 export const getUniqueId = (scope: Construct, id: string) =>
   `${TerraformStack.of(scope)}-${scope.node.id}-${id}-${hashId(scope.node.scope?.node?.id ?? scope.node.id)}`.toLowerCase();
 
-export const getConstuctName = (scope: Construct, id: string) => `${TerraformStack.of(scope)}-${id}`.toLowerCase();
+export const getConstructName = (scope: Construct, id: string) => `${TerraformStack.of(scope)}-${id}`.toLowerCase();

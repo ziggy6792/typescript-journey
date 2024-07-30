@@ -4,6 +4,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   async getNextMessage(): Promise<string> {
-    return `Hello from nest api`;
+    return `Hello from nest api!`;
   }
 }
