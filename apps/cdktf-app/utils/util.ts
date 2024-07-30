@@ -12,3 +12,5 @@ const hashId = (input: string) => crypto.createHash('md5').update(input).digest(
 // This ensures uniqueness of IDs across constructs
 export const getUniqueId = (scope: Construct, id: string) =>
   `${TerraformStack.of(scope)}-${scope.node.id}-${id}-${hashId(scope.node.scope?.node?.id ?? scope.node.id)}`.toLowerCase();
+
+export const getConstuctName = (scope: Construct, id: string) => `${TerraformStack.of(scope)}-${id}`.toLowerCase();
