@@ -5,6 +5,6 @@ import { commonConfig } from '@ts-journey/common';
 @Injectable()
 export class AppService {
   async getNextMessage(): Promise<string> {
-    return `Hello from "${commonConfig.PROJECT_NAME}"`;
+    return `Hello from "${commonConfig.PROJECT_NAME}!"`;
   }
 }

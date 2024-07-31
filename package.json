@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "deploy": "turbo run deploy --filter @ts-journey/sst-app",
+    "deploy": "turbo run deploy --filter @ts-journey/cdktf-app",
     "build:deploy": "run-s build deploy",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
