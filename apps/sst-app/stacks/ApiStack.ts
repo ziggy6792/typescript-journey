@@ -13,8 +13,8 @@ export function ApiStack({ stack, app }: StackContext) {
     memorySize: 256,
     timeout: cdk.Duration.seconds(30),
     runtime: lambda.Runtime.NODEJS_18_X,
-    handler: 'apps/lambda-api/dist/index.handler',
-    code: lambda.Code.fromAsset(path.join(require.resolve('@ts-journey/api'), '../../out')),
+    handler: 'index.handler',
+    code: lambda.Code.fromAsset(path.join(require.resolve('@ts-journey/api'), '../../out/build.zip')),
   });
 
   const api = new apiGateway.LambdaRestApi(stack, 'api', {
