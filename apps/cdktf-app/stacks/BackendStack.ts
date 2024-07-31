@@ -9,6 +9,7 @@ import {
   apiGatewayIntegration,
   iamRole,
   iamRolePolicyAttachment,
+  lambdaPermission,
   provider,
 } from '@cdktf/provider-aws';
 import * as path from 'path';
@@ -82,6 +83,7 @@ export class BackendStack extends AwsBaseStack {
       role: lambdaRole.arn,
       filename: zippedLambda.outputPath,
       sourceCodeHash: Fn.filebase64sha256(zippedLambda.outputPath),
+      timeout: 30,
     });
 
     const restApi = new apiGatewayRestApi.ApiGatewayRestApi(this, 'rest-api', {
@@ -100,7 +102,7 @@ export class BackendStack extends AwsBaseStack {
       resourceId: restApi.rootResourceId,
       httpMethod: 'ANY',
       integrationHttpMethod: 'POST',
-      type: 'HTTP',
+      type: 'AWS_PROXY',
       uri: apiLambda.invokeArn,
     });
 
@@ -126,11 +128,19 @@ export class BackendStack extends AwsBaseStack {
       uri: apiLambda.invokeArn,
     });
 
-    // new apiGatewayDeployment.ApiGatewayDeployment(this, 'deployment', {
-    //   restApiId: restApi.id,
-    //   stageName: 'dev',
-    //   dependsOn: [resource, apiLambda, apiIntegration],
-    // });
+    // Add Lambda permission to allow API Gateway to invoke the Lambda function
+    new lambdaPermission.LambdaPermission(this, 'api-gateway-permission', {
+      action: 'lambda:InvokeFunction',
+      functionName: apiLambda.functionName,
+      principal: 'apigateway.amazonaws.com',
+      sourceArn: `${restApi.executionArn}/*/*`,
+    });
+
+    new apiGatewayDeployment.ApiGatewayDeployment(this, 'deployment', {
+      restApiId: restApi.id,
+      stageName: 'dev',
+      dependsOn: [resource, apiLambda],
+    });
   }
 }
 
