@@ -10,30 +10,26 @@ import {
   iamRole,
   iamRolePolicyAttachment,
   lambdaPermission,
-  provider,
 } from '@cdktf/provider-aws';
 import * as path from 'path';
-import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 import * as archive from '@cdktf/provider-archive';
 import { AwsBaseStack } from './AwsBaseStack';
-import { getConstructName, getUniqueId } from '../utils/util';
+import { getConstructName } from '../utils/util';
+import { LambdaFunction } from '../constucts/LmbdaFunction';
 
 export class BackendStack extends AwsBaseStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
     new archive.provider.ArchiveProvider(this, 'archive-provider', {});
 
-    const lambdaFunctionName = 'lambda-api';
-
-    new TerraformOutput(this, 'backendOutput', {
-      value: 'hello world',
-    });
-
-    console.log(path.join(require.resolve('@ts-journey/api'), '..'));
-
-    console.log(process.env.INIT_CWD);
+    const lambdaFunctionName = 'api';
 
     const lambdaPath = path.join(path.join(require.resolve('@ts-journey/api'), '../../out/build.zip'));
+
+    const apiLambdaFunction = new LambdaFunction(this, 'lambda-function', {
+      assetPath: lambdaPath,
+      functionName: lambdaFunctionName,
+    });
 
     // console.log('lambdaPath!', lambdaPath);
 
@@ -53,44 +49,11 @@ export class BackendStack extends AwsBaseStack {
     //   type: AssetType.FILE,
     // });
 
-    // Create IAM role for Lambda
-    const lambdaRole = new iamRole.IamRole(this, 'lambda-execution-role', {
-      name: getConstructName(this, `${lambdaFunctionName}-execution-role`),
-      assumeRolePolicy: JSON.stringify({
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Effect: 'Allow',
-            Principal: {
-              Service: 'lambda.amazonaws.com',
-            },
-            Action: 'sts:AssumeRole',
-          },
-        ],
-      }),
-    });
-
-    // Attach policy to the role
-    new iamRolePolicyAttachment.IamRolePolicyAttachment(this, 'LambdaExecutionRolePolicy', {
-      role: lambdaRole.name,
-      policyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-    });
-
-    const apiLambda = new lambdaFunction.LambdaFunction(this, 'lambda-function', {
-      functionName: getConstructName(this, lambdaFunctionName),
-      handler: 'index.handler',
-      runtime: 'nodejs18.x',
-      role: lambdaRole.arn,
-      filename: lambdaPath,
-      sourceCodeHash: Fn.filebase64sha256(lambdaPath),
-      timeout: 30,
-    });
-
     const restApi = new apiGatewayRestApi.ApiGatewayRestApi(this, 'rest-api', {
       name: getConstructName(this, 'rest-api'),
     });
 
-    this.createApiGatewayLambdaMethod('root', restApi, restApi.rootResourceId, apiLambda);
+    this.createApiGatewayLambdaMethod('root', restApi, restApi.rootResourceId, apiLambdaFunction.lambdaFunction);
 
     const proxyResource = new apiGatewayResource.ApiGatewayResource(this, 'proxy-resource', {
       restApiId: restApi.id,
@@ -98,12 +61,12 @@ export class BackendStack extends AwsBaseStack {
       pathPart: '{proxy+}',
     });
 
-    this.createApiGatewayLambdaMethod('proxy-resource', restApi, proxyResource.id, apiLambda);
+    this.createApiGatewayLambdaMethod('proxy-resource', restApi, proxyResource.id, apiLambdaFunction.lambdaFunction);
 
     // Add Lambda permission to allow API Gateway to invoke the Lambda function
     new lambdaPermission.LambdaPermission(this, 'api-gateway-permission', {
       action: 'lambda:InvokeFunction',
-      functionName: apiLambda.functionName,
+      functionName: apiLambdaFunction.lambdaFunction.functionName,
       principal: 'apigateway.amazonaws.com',
       sourceArn: `${restApi.executionArn}/*/*`,
     });
@@ -111,7 +74,7 @@ export class BackendStack extends AwsBaseStack {
     const deployment = new apiGatewayDeployment.ApiGatewayDeployment(this, 'deployment', {
       restApiId: restApi.id,
       stageName: 'dev',
-      dependsOn: [proxyResource, apiLambda],
+      dependsOn: [proxyResource, apiLambdaFunction.lambdaFunction],
     });
 
     new TerraformOutput(this, 'invokeUrl', {
