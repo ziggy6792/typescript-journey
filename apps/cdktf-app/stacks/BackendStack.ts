@@ -90,43 +90,15 @@ export class BackendStack extends AwsBaseStack {
       name: getConstructName(this, 'rest-api'),
     });
 
-    const rootAny = new apiGatewayMethod.ApiGatewayMethod(this, 'any-method-1', {
-      restApiId: restApi.id,
-      resourceId: restApi.rootResourceId,
-      httpMethod: 'ANY',
-      authorization: 'NONE',
-    });
+    this.createApiGatewayLambdaMethod('root', restApi, restApi.rootResourceId, apiLambda);
 
-    const apiIntegration1 = new apiGatewayIntegration.ApiGatewayIntegration(this, 'lambda-integration-1', {
-      restApiId: restApi.id,
-      resourceId: restApi.rootResourceId,
-      httpMethod: 'ANY',
-      integrationHttpMethod: 'POST',
-      type: 'AWS_PROXY',
-      uri: apiLambda.invokeArn,
-    });
-
-    const resource = new apiGatewayResource.ApiGatewayResource(this, 'resource', {
+    const proxyResource = new apiGatewayResource.ApiGatewayResource(this, 'proxy-resource', {
       restApiId: restApi.id,
       parentId: restApi.rootResourceId,
       pathPart: '{proxy+}',
     });
 
-    new apiGatewayMethod.ApiGatewayMethod(this, 'any-method-2', {
-      restApiId: restApi.id,
-      resourceId: resource.id,
-      httpMethod: 'ANY',
-      authorization: 'NONE',
-    });
-
-    const apiIntegration = new apiGatewayIntegration.ApiGatewayIntegration(this, 'lambda-integration', {
-      restApiId: restApi.id,
-      resourceId: resource.id,
-      httpMethod: 'ANY',
-      integrationHttpMethod: 'POST',
-      type: 'AWS_PROXY',
-      uri: apiLambda.invokeArn,
-    });
+    this.createApiGatewayLambdaMethod('proxy-resource', restApi, proxyResource.id, apiLambda);
 
     // Add Lambda permission to allow API Gateway to invoke the Lambda function
     new lambdaPermission.LambdaPermission(this, 'api-gateway-permission', {
@@ -136,10 +108,37 @@ export class BackendStack extends AwsBaseStack {
       sourceArn: `${restApi.executionArn}/*/*`,
     });
 
-    new apiGatewayDeployment.ApiGatewayDeployment(this, 'deployment', {
+    const deployment = new apiGatewayDeployment.ApiGatewayDeployment(this, 'deployment', {
       restApiId: restApi.id,
       stageName: 'dev',
-      dependsOn: [resource, apiLambda],
+      dependsOn: [proxyResource, apiLambda],
+    });
+
+    new TerraformOutput(this, 'invokeUrl', {
+      value: deployment.invokeUrl,
+    });
+  }
+
+  private createApiGatewayLambdaMethod(
+    idPrefix: string,
+    restApi: apiGatewayRestApi.ApiGatewayRestApi,
+    resourceId: string,
+    apiLambda: lambdaFunction.LambdaFunction
+  ) {
+    new apiGatewayMethod.ApiGatewayMethod(this, `${idPrefix}-method`, {
+      restApiId: restApi.id,
+      resourceId,
+      httpMethod: 'ANY',
+      authorization: 'NONE',
+    });
+
+    new apiGatewayIntegration.ApiGatewayIntegration(this, `${idPrefix}-lambda-integration`, {
+      restApiId: restApi.id,
+      resourceId,
+      httpMethod: 'ANY',
+      integrationHttpMethod: 'POST',
+      type: 'AWS_PROXY',
+      uri: apiLambda.invokeArn,
     });
   }
 }

@@ -6,7 +6,6 @@
 ./**/out
 ./**/src
 ./.yarn
-./apps/sst-app
 !./.yarn/releases/**
 !./.yarn/plugins/**
 !./node_modules/.yarn-state.yml
