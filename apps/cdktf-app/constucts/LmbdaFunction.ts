@@ -1,7 +1,6 @@
 import { Fn } from 'cdktf';
 import { lambdaFunction, iamRole, iamRolePolicyAttachment } from '@cdktf/provider-aws';
 import { Construct } from 'constructs';
-import { getConstructName } from '../utils/util';
 
 interface LambdaFunctionProps {
   assetPath: string;
@@ -16,7 +15,7 @@ export class LambdaFunction extends Construct {
 
     // Create IAM role for Lambda
     const lambdaRole = new iamRole.IamRole(this, 'lambda-execution-role', {
-      name: getConstructName(this, `${functionName}-execution-role`),
+      name: `${functionName}-execution-role`,
       assumeRolePolicy: JSON.stringify({
         Version: '2012-10-17',
         Statement: [
@@ -38,7 +37,7 @@ export class LambdaFunction extends Construct {
     });
 
     this.lambdaFunction = new lambdaFunction.LambdaFunction(this, 'lambda-function', {
-      functionName: getConstructName(this, functionName),
+      functionName,
       handler: 'index.handler',
       runtime: 'nodejs18.x',
       role: lambdaRole.arn,

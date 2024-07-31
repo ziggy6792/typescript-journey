@@ -6,19 +6,18 @@ import * as archive from '@cdktf/provider-archive';
 import { AwsBaseStack } from './AwsBaseStack';
 import { LambdaFunction } from '../constucts/LmbdaFunction';
 import { LmbdaRestApi } from '../constucts/LmbdaRestApi';
+import { getConstructName } from '../utils/util';
 
 export class BackendStack extends AwsBaseStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
     new archive.provider.ArchiveProvider(this, 'archive-provider', {});
 
-    const lambdaFunctionName = 'api';
-
     const lambdaPath = path.join(path.join(require.resolve('@ts-journey/api'), '../../out/build.zip'));
 
     const apiLambdaFunction = new LambdaFunction(this, 'lambda-function', {
       assetPath: lambdaPath,
-      functionName: lambdaFunctionName,
+      functionName: getConstructName(this, 'api'),
     });
 
     const lambdaRestApi = new LmbdaRestApi(this, 'lambda-rest-api', {
