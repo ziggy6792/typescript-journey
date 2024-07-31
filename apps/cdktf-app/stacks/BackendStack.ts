@@ -33,20 +33,20 @@ export class BackendStack extends AwsBaseStack {
 
     console.log(process.env.INIT_CWD);
 
-    const lambdaPath = path.join(require.resolve('@ts-journey/api'), '../../out');
+    const lambdaPath = path.join(path.join(require.resolve('@ts-journey/api'), '../../out/build.zip'));
 
-    console.log('lambdaPath!', lambdaPath);
+    // console.log('lambdaPath!', lambdaPath);
 
-    const fileName = getUniqueId(this, lambdaFunctionName);
-    // const fileName = 'bla';
+    // const fileName = getUniqueId(this, lambdaFunctionName);
+    // // const fileName = 'bla';
 
-    const zipPath = path.join(process.env.INIT_CWD!, `/out/${fileName}.zip`);
+    // const zipPath = path.join(process.env.INIT_CWD!, `/out/${fileName}.zip`);
 
-    const zippedLambda = new archive.dataArchiveFile.DataArchiveFile(this, 'lambdaMyFunction', {
-      type: 'zip',
-      sourceDir: lambdaPath,
-      outputPath: zipPath,
-    });
+    // const zippedLambda = new archive.dataArchiveFile.DataArchiveFile(this, 'lambdaMyFunction', {
+    //   type: 'zip',
+    //   sourceDir: lambdaPath,
+    //   outputPath: zipPath,
+    // });
 
     // const asset = new TerraformAsset(this, `asset`, {
     //   path: zippedLambda.outputPath,
@@ -78,11 +78,11 @@ export class BackendStack extends AwsBaseStack {
 
     const apiLambda = new lambdaFunction.LambdaFunction(this, 'lambda-function', {
       functionName: getConstructName(this, lambdaFunctionName),
-      handler: 'apps/lambda-api/dist/index.handler',
+      handler: 'index.handler',
       runtime: 'nodejs18.x',
       role: lambdaRole.arn,
-      filename: zippedLambda.outputPath,
-      sourceCodeHash: Fn.filebase64sha256(zippedLambda.outputPath),
+      filename: lambdaPath,
+      sourceCodeHash: Fn.filebase64sha256(lambdaPath),
       timeout: 30,
     });
 
