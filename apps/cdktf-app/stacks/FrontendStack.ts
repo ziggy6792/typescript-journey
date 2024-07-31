@@ -20,10 +20,6 @@ export class FrontendStack extends AwsBaseStack {
       value: simpleStaticSite.url,
     });
 
-    new TerraformOutput(this, 'simpleWebsiteBucket', {
-      value: simpleStaticSite.bucket.bucket,
-    });
-
     const staticStie = new StaticSite(this, 'static-site', {
       path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),
     });
@@ -31,18 +27,6 @@ export class FrontendStack extends AwsBaseStack {
     // Output the CloudFront distribution URL
     new TerraformOutput(this, 'websiteUrl', {
       value: staticStie.url,
-    });
-
-    new TerraformOutput(this, 'websiteBucket', {
-      value: staticStie.bucket.bucket,
-    });
-
-    const s3DirDeploy2 = new S3DirDeploy2(this, 's3-dir-deploy-2', {
-      path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),
-    });
-
-    new TerraformOutput(this, 's3DirDeploy2Bucket', {
-      value: s3DirDeploy2.bucket.bucket,
     });
   }
 }

@@ -7,7 +7,7 @@ By Simon Verhoeven
 - `yarn install`
 - `yarn build` build packages
 - `yarn dev` run locally for development
-- `yarn deploy` deploy with SST
+- `yarn deploy` deploy with cdktf
 
 ## Using this example
 

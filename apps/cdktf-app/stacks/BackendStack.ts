@@ -1,6 +1,5 @@
 import { Construct } from 'constructs';
-import { App, TerraformOutput } from 'cdktf';
-import { lambdaFunction, apiGatewayRestApi, apiGatewayMethod, apiGatewayIntegration } from '@cdktf/provider-aws';
+import { TerraformOutput } from 'cdktf';
 import * as path from 'path';
 import * as archive from '@cdktf/provider-archive';
 import { AwsBaseStack } from './AwsBaseStack';
@@ -24,35 +23,8 @@ export class BackendStack extends AwsBaseStack {
       handler: apiLambdaFunction.lambdaFunction,
     });
 
-    new TerraformOutput(this, 'invokeUrl', {
+    new TerraformOutput(this, 'lambdaApiUrl', {
       value: lambdaRestApi.url,
     });
   }
-
-  private createApiGatewayLambdaMethod(
-    idPrefix: string,
-    restApi: apiGatewayRestApi.ApiGatewayRestApi,
-    resourceId: string,
-    apiLambda: lambdaFunction.LambdaFunction
-  ) {
-    new apiGatewayMethod.ApiGatewayMethod(this, `${idPrefix}-method`, {
-      restApiId: restApi.id,
-      resourceId,
-      httpMethod: 'ANY',
-      authorization: 'NONE',
-    });
-
-    new apiGatewayIntegration.ApiGatewayIntegration(this, `${idPrefix}-lambda-integration`, {
-      restApiId: restApi.id,
-      resourceId,
-      httpMethod: 'ANY',
-      integrationHttpMethod: 'POST',
-      type: 'AWS_PROXY',
-      uri: apiLambda.invokeArn,
-    });
-  }
 }
-
-const app = new App();
-new BackendStack(app, 'DeploymentStack');
-app.synth();
