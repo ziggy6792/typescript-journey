@@ -13,7 +13,7 @@ export function ApiStack({ stack, app }: StackContext) {
     memorySize: 256,
     timeout: cdk.Duration.seconds(30),
     runtime: lambda.Runtime.NODEJS_18_X,
-    handler: 'index.handler',
+    handler: 'dist/index.handler',
     code: lambda.Code.fromAsset(path.join(require.resolve('@ts-journey/api'), '../../out/build.zip')),
   });
 

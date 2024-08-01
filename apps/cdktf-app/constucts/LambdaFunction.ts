@@ -38,7 +38,7 @@ export class LambdaFunction extends Construct {
 
     this.lambdaFunction = new lambdaFunction.LambdaFunction(this, 'lambda-function', {
       functionName,
-      handler: 'index.handler',
+      handler: 'dist/index.handler',
       runtime: 'nodejs18.x',
       role: lambdaRole.arn,
       filename: assetPath,

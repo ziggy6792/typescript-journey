@@ -3,8 +3,8 @@ import { TerraformOutput } from 'cdktf';
 import * as path from 'path';
 import * as archive from '@cdktf/provider-archive';
 import { AwsBaseStack } from './AwsBaseStack';
-import { LambdaFunction } from '../constucts/LmbdaFunction';
-import { LmbdaRestApi } from '../constucts/LmbdaRestApi';
+import { LambdaFunction } from '../constucts/LambdaFunction';
+import { LambdaRestApi } from '../constucts/LambdaRestApi';
 import { getConstructName } from '../utils/util';
 
 export class BackendStack extends AwsBaseStack {
@@ -19,7 +19,7 @@ export class BackendStack extends AwsBaseStack {
       functionName: getConstructName(this, 'api'),
     });
 
-    const lambdaRestApi = new LmbdaRestApi(this, 'lambda-rest-api', {
+    const lambdaRestApi = new LambdaRestApi(this, 'lambda-rest-api', {
       handler: apiLambdaFunction.lambdaFunction,
     });
 

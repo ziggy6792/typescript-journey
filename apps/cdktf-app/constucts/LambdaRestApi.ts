@@ -11,14 +11,14 @@ import {
 
 import { getConstructName } from '../utils/util';
 
-interface LmbdaRestApiProps {
+interface LambdaRestApiProps {
   handler: lambdaFunction.LambdaFunction;
 }
 
-export class LmbdaRestApi extends Construct {
+export class LambdaRestApi extends Construct {
   public readonly url: string;
 
-  constructor(scope: Construct, id: string, { handler }: LmbdaRestApiProps) {
+  constructor(scope: Construct, id: string, { handler }: LambdaRestApiProps) {
     super(scope, id);
 
     const restApi = new apiGatewayRestApi.ApiGatewayRestApi(this, 'rest-api', {
