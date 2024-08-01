@@ -8457,6 +8457,7 @@ __metadata:
     "@ts-journey/next-app": "workspace:^"
     "@ts-journey/vite-app": "workspace:^"
     "@types/mime-types": ^2
+    aws-sdk: 2.1659.0
     cdktf: ^0.20.8
     cdktf-cli: ^0.20.8
     constructs: ^10.3.0
