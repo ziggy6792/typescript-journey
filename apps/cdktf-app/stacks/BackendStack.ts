@@ -1,5 +1,4 @@
 import { Construct } from 'constructs';
-import { TerraformOutput } from 'cdktf';
 import * as path from 'path';
 import * as archive from '@cdktf/provider-archive';
 import { AwsBaseStack, AwsBaseStackProps } from './AwsBaseStack';
@@ -8,6 +7,8 @@ import { LambdaRestApi } from '../constucts/LambdaRestApi';
 import { getConstructName } from '../utils/util';
 
 export class BackendStack extends AwsBaseStack {
+  public readonly apiUrl: string;
+
   constructor(
     scope: Construct,
     id: string,
@@ -28,8 +29,6 @@ export class BackendStack extends AwsBaseStack {
       stageName: this.getStage(),
     });
 
-    new TerraformOutput(this, 'lambdaApiUrl', {
-      value: lambdaRestApi.url,
-    });
+    this.apiUrl = lambdaRestApi.url;
   }
 }

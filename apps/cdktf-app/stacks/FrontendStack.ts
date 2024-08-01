@@ -5,11 +5,15 @@ import { SimpleStaticSite } from '../constucts/SimpleStaticSite';
 import { StaticSite } from '../constucts/StaticSite';
 import { AwsBaseStack, AwsBaseStackProps } from './AwsBaseStack';
 
+interface FrontendStackProps extends AwsBaseStackProps {
+  apiUrl: string;
+}
+
 export class FrontendStack extends AwsBaseStack {
   constructor(
     scope: Construct,
     id: string,
-    protected readonly props: AwsBaseStackProps
+    protected readonly props: FrontendStackProps
   ) {
     super(scope, id, props);
 
@@ -29,6 +33,11 @@ export class FrontendStack extends AwsBaseStack {
     // Output the CloudFront distribution URL
     new TerraformOutput(this, 'websiteUrl', {
       value: staticStie.url,
+    });
+
+    // Output the CloudFront distribution URL
+    new TerraformOutput(this, 'apiUrl', {
+      value: props.apiUrl,
     });
   }
 }
