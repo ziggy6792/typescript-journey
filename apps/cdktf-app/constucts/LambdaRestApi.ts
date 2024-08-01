@@ -13,12 +13,13 @@ import { getConstructName } from '../utils/util';
 
 interface LambdaRestApiProps {
   handler: lambdaFunction.LambdaFunction;
+  stageName: string;
 }
 
 export class LambdaRestApi extends Construct {
   public readonly url: string;
 
-  constructor(scope: Construct, id: string, { handler }: LambdaRestApiProps) {
+  constructor(scope: Construct, id: string, { handler, stageName }: LambdaRestApiProps) {
     super(scope, id);
 
     const restApi = new apiGatewayRestApi.ApiGatewayRestApi(this, 'rest-api', {
@@ -45,7 +46,7 @@ export class LambdaRestApi extends Construct {
 
     const deployment = new apiGatewayDeployment.ApiGatewayDeployment(this, 'deployment', {
       restApiId: restApi.id,
-      stageName: 'dev',
+      stageName,
       dependsOn: [proxyResource, handler],
     });
 

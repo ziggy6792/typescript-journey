@@ -1,15 +1,17 @@
 import { Construct } from 'constructs';
-import { App, S3Backend, TerraformOutput, TerraformStack } from 'cdktf';
+import { TerraformOutput } from 'cdktf';
 import * as path from 'path';
-import { provider } from '@cdktf/provider-aws';
-import { S3DirDeploy2 } from '../constucts/S3DirDeploy2';
 import { SimpleStaticSite } from '../constucts/SimpleStaticSite';
 import { StaticSite } from '../constucts/StaticSite';
-import { AwsBaseStack } from './AwsBaseStack';
+import { AwsBaseStack, AwsBaseStackProps } from './AwsBaseStack';
 
 export class FrontendStack extends AwsBaseStack {
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
+  constructor(
+    scope: Construct,
+    id: string,
+    protected readonly props: AwsBaseStackProps
+  ) {
+    super(scope, id, props);
 
     const simpleStaticSite = new SimpleStaticSite(this, 'simple-static-site', {
       path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),

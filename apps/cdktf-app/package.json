@@ -11,6 +11,8 @@
     "synth": "cdktf synth",
     "compile": "tsc --pretty",
     "deploy": "yarn cdktf deploy '*' --auto-approve",
+    "deploy:dev": "yarn cdktf deploy '*-dev$' --auto-approve",
+    "deploy:prod": "yarn cdktf deploy '*-prod$' --auto-approve",
     "watch": "tsc -w",
     "test": "jest",
     "test:watch": "jest --watch",
