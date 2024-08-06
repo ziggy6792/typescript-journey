@@ -1,6 +1,8 @@
 import { Construct } from 'constructs';
-import { TerraformOutput } from 'cdktf';
+import { Fn, TerraformOutput } from 'cdktf';
 import * as path from 'path';
+import { s3Bucket, s3Object } from '@cdktf/provider-aws';
+import * as fs from 'fs';
 import { SimpleStaticSite } from '../constucts/SimpleStaticSite';
 import { StaticSite } from '../constucts/StaticSite';
 import { AwsBaseStack, AwsBaseStackProps } from './AwsBaseStack';
@@ -28,6 +30,19 @@ export class FrontendStack extends AwsBaseStack {
 
     const staticStie = new StaticSite(this, 'static-site', {
       path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),
+    });
+
+    const content = {
+      CDKTF_API_URL: props.apiUrl,
+    };
+
+    const envConfig = JSON.stringify(content);
+
+    new s3Object.S3Object(this, 'env-config', {
+      bucket: staticStie.bucket.bucket,
+      key: 'config/env.json',
+      content: envConfig,
+      contentType: 'application/json',
     });
 
     // Output the CloudFront distribution URL

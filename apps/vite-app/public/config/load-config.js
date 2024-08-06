@@ -22,4 +22,3 @@ function loadJSON(filePath) {
 }
 
 window.env = loadJSON('/config/env.json');
-window.featureFlags = loadJSON('/config/flags.json');
