@@ -9,12 +9,13 @@ import { getUniqueId } from '../utils/util';
 interface S3DirDeployProps {
   path: string;
   bucketName?: string;
+  ignoreFiles?: string[];
 }
 
 export class S3DirDeploy extends Construct {
   public readonly bucket: s3Bucket.S3Bucket;
 
-  constructor(scope: Construct, id: string, { path: dirPath, bucketName: _bucketName }: S3DirDeployProps) {
+  constructor(scope: Construct, id: string, { path: dirPath, bucketName: _bucketName, ignoreFiles }: S3DirDeployProps) {
     super(scope, id);
 
     const bucketName = _bucketName ?? getUniqueId(this, 'bucket');
@@ -30,12 +31,15 @@ export class S3DirDeploy extends Construct {
 
       if (fs.statSync(filePath).isDirectory()) return;
 
+      if (ignoreFiles?.includes(file)) return;
+
       new s3Object.S3Object(this, `s3-object-${file}`, {
         bucket: this.bucket.bucket,
         key: file,
         source: filePath,
         etag: Fn.filemd5(filePath),
         contentType: mime.lookup(file).toString(),
+        forceDestroy: true,
       });
     });
   }

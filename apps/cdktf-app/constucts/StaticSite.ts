@@ -9,6 +9,7 @@ import { S3DirDeploy } from './S3DirDeploy';
 interface StaticSiteProps {
   path: string;
   bucketName?: string;
+  ignoreFiles?: string[];
 }
 
 export class StaticSite extends Construct {
@@ -16,12 +17,13 @@ export class StaticSite extends Construct {
 
   public readonly bucket: s3Bucket.S3Bucket;
 
-  constructor(scope: Construct, id: string, { path, bucketName }: StaticSiteProps) {
+  constructor(scope: Construct, id: string, { path, bucketName, ignoreFiles }: StaticSiteProps) {
     super(scope, id);
 
     const s3DirDeploy = new S3DirDeploy(this, 's3-dir-deploy', {
       path,
       bucketName,
+      ignoreFiles,
     });
 
     this.bucket = s3DirDeploy.bucket;
