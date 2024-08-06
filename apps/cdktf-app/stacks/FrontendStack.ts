@@ -30,7 +30,7 @@ export class FrontendStack extends AwsBaseStack {
 
     const staticStie = new StaticSite(this, 'static-site', {
       path: path.join(path.join(require.resolve('@ts-journey/vite-app'), '../dist')),
-      ignoreFiles: ['config/env.json'],
+      // ignoreFiles: ['config/env.json'],
     });
 
     const content = {
@@ -40,11 +40,12 @@ export class FrontendStack extends AwsBaseStack {
     const envConfig = JSON.stringify(content);
 
     new s3Object.S3Object(this, 'env-config', {
-      bucket: staticStie.bucket.bucket,
+      bucket: staticStie.s3DirDeploy.bucket.bucket,
       key: 'config/env.json',
       content: envConfig,
       contentType: 'application/json',
       forceDestroy: true,
+      dependsOn: staticStie.s3DirDeploy.objects,
     });
 
     // Output the CloudFront distribution URL

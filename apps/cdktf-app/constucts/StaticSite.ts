@@ -15,18 +15,18 @@ interface StaticSiteProps {
 export class StaticSite extends Construct {
   public readonly url: string;
 
-  public readonly bucket: s3Bucket.S3Bucket;
+  public readonly s3DirDeploy: S3DirDeploy;
 
   constructor(scope: Construct, id: string, { path, bucketName, ignoreFiles }: StaticSiteProps) {
     super(scope, id);
 
-    const s3DirDeploy = new S3DirDeploy(this, 's3-dir-deploy', {
+    this.s3DirDeploy = new S3DirDeploy(this, 's3-dir-deploy', {
       path,
       bucketName,
       ignoreFiles,
     });
 
-    this.bucket = s3DirDeploy.bucket;
+    const { bucket } = this.s3DirDeploy;
 
     const originAccessControl = new cfnOAC.CloudfrontOriginAccessControl(this, 'oac', {
       name: getUniqueId(this, 'oac'),
@@ -39,8 +39,8 @@ export class StaticSite extends Construct {
     const distribution = new cfnDist.CloudfrontDistribution(this, 'cloudfront-distribution', {
       origin: [
         {
-          domainName: this.bucket.bucketRegionalDomainName,
-          originId: this.bucket.id,
+          domainName: bucket.bucketRegionalDomainName,
+          originId: bucket.id,
           s3OriginConfig: {
             originAccessIdentity: '',
           },
@@ -53,7 +53,7 @@ export class StaticSite extends Construct {
       defaultCacheBehavior: {
         allowedMethods: ['GET', 'HEAD'],
         cachedMethods: ['GET', 'HEAD'],
-        targetOriginId: this.bucket.id,
+        targetOriginId: bucket.id,
         viewerProtocolPolicy: 'redirect-to-https',
         forwardedValues: {
           queryString: false,
@@ -76,7 +76,7 @@ export class StaticSite extends Construct {
       statement: [
         {
           actions: ['s3:GetObject'],
-          resources: [`${this.bucket.arn}/*`],
+          resources: [`${bucket.arn}/*`],
           principals: [
             {
               identifiers: ['cloudfront.amazonaws.com'],
@@ -95,7 +95,7 @@ export class StaticSite extends Construct {
     });
 
     new S3BucketPolicy(this, 's3-bucket-policy', {
-      bucket: this.bucket.id,
+      bucket: bucket.id,
       policy: oacPolicyDocument.json,
     });
 
