@@ -24,7 +24,16 @@ export class AwsBaseStack extends TerraformStack {
     });
 
     const prereqStateFile = path.join(process.env.INIT_CWD!, `./terraform.${prereqStackNames[props.stage]}.tfstate`);
-    const prereqState = JSON.parse(fs.readFileSync(prereqStateFile, 'utf-8'));
+
+    let prereqState = null;
+    try {
+      prereqState = JSON.parse(fs.readFileSync(prereqStateFile, 'utf-8'));
+    } catch (error: any) {
+      if (error.code === 'ENOENT') {
+        throw new Error(`Could not find prerequisite state file: ${prereqStateFile}`);
+      }
+      throw error;
+    }
 
     // Only one backend is supported by Terraform
     // S3 Backend - https://www.terraform.io/docs/backends/types/s3.html
