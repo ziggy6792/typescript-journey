@@ -14,3 +14,15 @@ export const getUniqueId = (scope: Construct, id: string) =>
   `${TerraformStack.of(scope)}-${scope.node.id}-${id}-${hashId(scope.node.scope?.node?.id ?? scope.node.id)}`.toLowerCase();
 
 export const getConstructName = (scope: Construct, id: string) => `${TerraformStack.of(scope)}-${id}`.toLowerCase();
+
+export type Stage = 'dev' | 'prod';
+
+export const stages: Stage[] = ['dev'];
+
+export const prereStackNames = stages.reduce(
+  (acc, stage) => {
+    acc[stage] = `cdktf-prereq-${stage}`;
+    return acc;
+  },
+  {} as Record<Stage, string>
+);

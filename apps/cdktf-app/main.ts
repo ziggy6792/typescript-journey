@@ -1,27 +1,14 @@
 import { App } from 'cdktf';
-import { STSClient, GetCallerIdentityCommand } from '@aws-sdk/client-sts';
-import { FrontendStack } from './stacks/FrontendStack';
 import { BackendStack } from './stacks/BackendStack';
-import { PreReqStack } from './stacks/PreReqStack';
+import { stages } from './utils/util';
+import { FrontendStack } from './stacks/FrontendStack';
 
-const client = new STSClient({});
+const app = new App();
 
-const main = async () => {
-  const command = new GetCallerIdentityCommand({});
-  const stsResponse = await client.send(command);
+stages.forEach((stage) => {
+  const backendStack = new BackendStack(app, `cdktf-backend-${stage}`, { stage });
 
-  const stages = ['dev', 'prod'];
+  new FrontendStack(app, `cdktf-frontend-${stage}`, { stage, apiUrl: backendStack.apiUrl });
+});
 
-  const app = new App();
-
-  stages.forEach((stage) => {
-    const backendId = ['cdktf-aws-demo-bucket', stage, stsResponse.Account].join('-');
-    new PreReqStack(app, `cdktf-prereq-${stage}`, { backendId, stage });
-    const backendStack = new BackendStack(app, `cdktf-backend-${stage}`, { stage, backendBucket: backendId });
-    new FrontendStack(app, `cdktf-frontend-${stage}`, { stage, backendBucket: backendId, apiUrl: backendStack.apiUrl });
-  });
-
-  app.synth();
-};
-
-main();
+app.synth();

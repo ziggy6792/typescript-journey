@@ -1,6 +1,6 @@
 import { Construct } from 'constructs';
 import * as path from 'path';
-import * as archive from '@cdktf/provider-archive';
+import { TerraformOutput } from 'cdktf';
 import { AwsBaseStack, AwsBaseStackProps } from './AwsBaseStack';
 import { LambdaFunction } from '../constucts/LambdaFunction';
 import { LambdaRestApi } from '../constucts/LambdaRestApi';
@@ -15,7 +15,6 @@ export class BackendStack extends AwsBaseStack {
     protected readonly props: AwsBaseStackProps
   ) {
     super(scope, id, props);
-    new archive.provider.ArchiveProvider(this, 'archive-provider', {});
 
     const lambdaPath = path.join(path.join(require.resolve('@ts-journey/api'), '../../out/build.zip'));
 
@@ -30,5 +29,9 @@ export class BackendStack extends AwsBaseStack {
     });
 
     this.apiUrl = lambdaRestApi.url;
+
+    new TerraformOutput(this, 'lambdaApiUrl', {
+      value: lambdaRestApi.url,
+    });
   }
 }
