@@ -6,6 +6,7 @@ import { getNestApp } from '@ts-journey/api';
 
 const buildLocalServer = async () => {
   const app = await getNestApp();
+  app.enableCors();
   await app.listen(4000);
 };
 
