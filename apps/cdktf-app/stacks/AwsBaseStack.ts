@@ -5,7 +5,7 @@ import { S3Backend, TerraformStack } from 'cdktf';
 import { provider } from '@cdktf/provider-aws';
 import * as path from 'path';
 import * as fs from 'fs';
-import { Stage, prereStackNames } from '../utils/util';
+import { Stage, prereqStackNames } from '../utils/util';
 
 export interface AwsBaseStackProps {
   stage: Stage;
@@ -23,7 +23,7 @@ export class AwsBaseStack extends TerraformStack {
       region: 'ap-southeast-1',
     });
 
-    const prereqStateFile = path.join(process.env.INIT_CWD!, `./terraform.${prereStackNames[props.stage]}.tfstate`);
+    const prereqStateFile = path.join(process.env.INIT_CWD!, `./terraform.${prereqStackNames[props.stage]}.tfstate`);
     const prereqState = JSON.parse(fs.readFileSync(prereqStateFile, 'utf-8'));
 
     // Only one backend is supported by Terraform

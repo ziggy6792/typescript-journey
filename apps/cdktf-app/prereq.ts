@@ -1,7 +1,7 @@
 import { App } from 'cdktf';
 import { STSClient, GetCallerIdentityCommand } from '@aws-sdk/client-sts';
 import { PreReqStack } from './stacks/PreReqStack';
-import { prereStackNames, stages } from './utils/util';
+import { prereqStackNames, stages } from './utils/util';
 
 const client = new STSClient({});
 
@@ -14,7 +14,7 @@ const main = async () => {
   stages.forEach((stage) => {
     const backendBucket = ['cdktf-aws-demo', stage, stsResponse.Account].join('-');
     const dynamodbTable = ['cdktf-aws-demo', stage].join('-');
-    new PreReqStack(app, prereStackNames[stage], { bucket: backendBucket, dynamodbTable });
+    new PreReqStack(app, prereqStackNames[stage], { bucket: backendBucket, dynamodbTable });
   });
 
   app.synth();

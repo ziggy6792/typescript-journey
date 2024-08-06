@@ -19,7 +19,7 @@ export type Stage = 'dev' | 'prod';
 
 export const stages: Stage[] = ['dev'];
 
-export const prereStackNames = stages.reduce(
+export const prereqStackNames = stages.reduce(
   (acc, stage) => {
     acc[stage] = `cdktf-prereq-${stage}`;
     return acc;
