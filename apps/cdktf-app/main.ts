@@ -6,9 +6,9 @@ import { FrontendStack } from './stacks/FrontendStack';
 const app = new App();
 
 stages.forEach((stage) => {
-  const backendStack = new BackendStack(app, `cdktf-backend-${stage}`, { stage });
+  const backendStack = new BackendStack(app, `cdktf-${stage}-backend`, { stage });
 
-  new FrontendStack(app, `cdktf-frontend-${stage}`, { stage, apiUrl: backendStack.apiUrl });
+  new FrontendStack(app, `cdktf-${stage}-frontend`, { stage, apiUrl: backendStack.apiUrl });
 });
 
 app.synth();
