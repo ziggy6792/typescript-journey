@@ -8408,7 +8408,7 @@ __metadata:
   resolution: "@ts-journey/cdk-app@workspace:apps/cdk-app"
   dependencies:
     "@aws-solutions-constructs/core": "npm:^2.41.0"
-    "@ts-journey/api": "npm:0.0.1"
+    "@ts-journey/api": "workspace:^"
     "@types/minimist": "npm:^1"
     "@types/node": "npm:20.4.8"
     "@types/node-abi": "npm:^3"
