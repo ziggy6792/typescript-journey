@@ -1,4 +1,4 @@
-FROM node:18.18.0 AS builder
+FROM node:20.9.0 AS builder
 
 ARG TARGET_APP
 
