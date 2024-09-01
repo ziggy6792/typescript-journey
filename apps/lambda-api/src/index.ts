@@ -1,15 +1,23 @@
 /* eslint-disable max-len */
 
 import { Midjourney } from 'midjourney';
+import dotenv from 'dotenv';
+import path from 'path';
+
+if (process.env.PROJECT_CWD) {
+  dotenv.config({ path: path.join(process.env.PROJECT_CWD, '/.env') });
+}
 
 const client = new Midjourney({
   ServerId: '1099775183880986716',
   ChannelId: '1099775183880986719',
-  SalaiToken: '',
+  SalaiToken: process.env.DISCORD_TOKEN,
   Debug: true,
   // Ws: true, // enable ws is required for remix mode (and custom zoom)
 });
 // await client.init();
+
+dotenv.config();
 
 const characterDescription = `A friendly green frog with big eyes and a cheerful smile, named Ziggy.`;
 

@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@ts-journey/common": "workspace:^",
+    "dotenv": "^16.4.5",
     "midjourney": "^4.3.17"
   },
   "devDependencies": {

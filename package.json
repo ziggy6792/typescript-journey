@@ -6,7 +6,7 @@
     "dev": "turbo run dev --concurrency 11",
     "build": "turbo run build",
     "pre:deploy": "turbo run pre:deploy",
-    "deploy": "turbo run deploy --filter @ts-journey/cdktf-app",
+    "deploy": "turbo run deploy --filter @ts-journey/sst-app",
     "build:deploy": "run-s build deploy",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",

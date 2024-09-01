@@ -170,3 +170,5 @@ dist
 **/tsconfig.tsbuildinfo
 !jest.config.js
 !setup.js
+
+.env
